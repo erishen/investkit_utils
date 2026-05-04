@@ -13,6 +13,12 @@ InvestKit 共享模块
 - testing: 测试工具函数
 """
 
+from investkit_utils.config import (
+    Config,
+    get_config,
+    reload_config,
+    set_config_path,
+)
 from investkit_utils.log_utils import get_logger, setup_logging
 from investkit_utils.api_docs import (
     APIService,
@@ -46,6 +52,10 @@ from investkit_utils.types import (
 
 __version__ = "1.0.0"
 __all__ = [
+    "Config",
+    "get_config",
+    "reload_config",
+    "set_config_path",
     "get_logger",
     "setup_logging",
     "APIService",
