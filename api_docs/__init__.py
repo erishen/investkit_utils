@@ -1,0 +1,38 @@
+"""
+InvestKit API 文档聚合模块
+
+聚合各项目的 OpenAPI 文档，提供统一的 API 文档入口。
+
+使用示例:
+    from investkit_utils.api_docs import aggregate_openapi_docs, serve_aggregated_docs
+
+    # 聚合文档
+    app = serve_aggregated_docs()
+"""
+
+from investkit_utils.api_docs.services import (
+    APIService,
+    INVESTKIT_SERVICES,
+)
+
+from investkit_utils.api_docs.openapi import (
+    merge_openapi_specs,
+    fetch_openapi_spec,
+    aggregate_openapi_docs,
+    load_openapi_spec_from_file,
+    aggregate_from_files,
+)
+
+from investkit_utils.api_docs.server import serve_aggregated_docs
+
+
+__all__ = [
+    "APIService",
+    "INVESTKIT_SERVICES",
+    "merge_openapi_specs",
+    "fetch_openapi_spec",
+    "aggregate_openapi_docs",
+    "load_openapi_spec_from_file",
+    "aggregate_from_files",
+    "serve_aggregated_docs",
+]

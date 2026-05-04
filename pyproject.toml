@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "investkit-utils"
+version = "1.0.0"
+description = "InvestKit 工具库 - 统一的配置、日志、工具、异常、类型定义和测试工具"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    {name = "InvestKit Team"}
+]
+keywords = [
+    "investkit",
+    "utils",
+    "log_utils",
+    "exceptions",
+]
+
+dependencies = [
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
+api = [
+    "fastapi>=0.100.0",
+    "httpx>=0.25.0",
+]
+
+[tool.setuptools.packages.find]
+where = [".."]
+include = ["investkit_utils*"]
+namespaces = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true

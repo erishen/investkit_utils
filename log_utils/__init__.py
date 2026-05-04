@@ -1,0 +1,43 @@
+"""
+InvestKit 统一日志模块
+
+提供统一的日志格式和配置，所有项目应使用此模块进行日志记录。
+
+使用示例:
+    from investkit_utils.log_utils import get_logger, setup_logging
+
+    logger = get_logger(__name__)
+    logger.info("操作成功", extra={"user_id": "123", "action": "login"})
+"""
+
+from investkit_utils.log_utils.config import (
+    LoggingConfig,
+    LogFormat,
+    LogLevel,
+)
+
+from investkit_utils.log_utils.context import (
+    set_correlation_id,
+    get_correlation_id,
+)
+
+from investkit_utils.log_utils.logger import InvestKitLogger
+
+from investkit_utils.log_utils.manager import (
+    LoggerManager,
+    get_logger,
+    setup_logging,
+)
+
+
+__all__ = [
+    "get_logger",
+    "setup_logging",
+    "set_correlation_id",
+    "get_correlation_id",
+    "LoggingConfig",
+    "LogFormat",
+    "LogLevel",
+    "InvestKitLogger",
+    "LoggerManager",
+]
