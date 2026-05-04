@@ -1,10 +1,11 @@
 """
 InvestKit 共享模块
 
-提供各项目共享的配置、日志、工具、异常、类型定义和测试工具。
+提供各项目共享的配置、日志、缓存、工具、异常、类型定义和测试工具。
 
 模块:
 - config: 配置管理
+- cache: 缓存抽象层
 - logging: 统一日志
 - api_docs: API 文档聚合
 - utils: 通用工具函数
@@ -18,6 +19,13 @@ from investkit_utils.config import (
     get_config,
     reload_config,
     set_config_path,
+)
+from investkit_utils.cache import (
+    CacheBackend,
+    MemoryCache,
+    get_cache,
+    cached,
+    cached_async,
 )
 from investkit_utils.log_utils import get_logger, setup_logging
 from investkit_utils.api_docs import (
@@ -56,6 +64,11 @@ __all__ = [
     "get_config",
     "reload_config",
     "set_config_path",
+    "CacheBackend",
+    "MemoryCache",
+    "get_cache",
+    "cached",
+    "cached_async",
     "get_logger",
     "setup_logging",
     "APIService",
