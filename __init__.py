@@ -33,6 +33,9 @@ from investkit_utils.api_docs import (
     INVESTKIT_SERVICES,
     aggregate_openapi_docs,
     serve_aggregated_docs,
+    ServiceRegistry,
+    ServiceInfo,
+    get_service_registry,
 )
 from investkit_utils.utils import (
     parse_date,
@@ -75,6 +78,9 @@ __all__ = [
     "INVESTKIT_SERVICES",
     "aggregate_openapi_docs",
     "serve_aggregated_docs",
+    "ServiceRegistry",
+    "ServiceInfo",
+    "get_service_registry",
     "parse_date",
     "format_date",
     "retry",

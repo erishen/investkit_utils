@@ -21,6 +21,19 @@ from investkit_utils.api_docs.openapi import (
     aggregate_openapi_docs,
     load_openapi_spec_from_file,
     aggregate_from_files,
+    set_cache,
+    clear_cache,
+)
+
+from investkit_utils.api_docs.discovery import (
+    ServiceRegistry,
+    ServiceInfo,
+    ServiceStatus,
+    HealthCheckResult,
+    get_service_registry,
+    register_service,
+    get_service,
+    get_all_services,
 )
 
 from investkit_utils.api_docs.server import serve_aggregated_docs
@@ -34,5 +47,15 @@ __all__ = [
     "aggregate_openapi_docs",
     "load_openapi_spec_from_file",
     "aggregate_from_files",
+    "set_cache",
+    "clear_cache",
+    "ServiceRegistry",
+    "ServiceInfo",
+    "ServiceStatus",
+    "HealthCheckResult",
+    "get_service_registry",
+    "register_service",
+    "get_service",
+    "get_all_services",
     "serve_aggregated_docs",
 ]
