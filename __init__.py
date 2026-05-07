@@ -12,6 +12,7 @@ InvestKit 共享模块
 - exceptions: 统一异常处理
 - types: 共享类型定义
 - testing: 测试工具函数
+- db: 数据库模型、连接管理、路径配置
 """
 
 from investkit_utils.config import (
@@ -82,6 +83,25 @@ from investkit_utils.types import (
     Position,
     Portfolio,
 )
+from investkit_utils.db import (
+    Base,
+    DATA_DIR,
+    DataSyncLog,
+    EXCLUDED_KEYWORDS,
+    MLModel,
+    PredictionRecord,
+    StockInfo as DBStockInfo,
+    StockKline,
+    db_connection,
+    db_transaction,
+    ensure_data_dir,
+    get_asset_lens_db_path,
+    get_db_path,
+    get_stock_analysis_db_path,
+    get_stock_klines_db_path,
+    init_database,
+    is_excluded_stock,
+)
 
 __version__ = "1.0.0"
 __all__ = [
@@ -142,4 +162,21 @@ __all__ = [
     "TradeSignal",
     "Position",
     "Portfolio",
+    "Base",
+    "DATA_DIR",
+    "DataSyncLog",
+    "EXCLUDED_KEYWORDS",
+    "MLModel",
+    "PredictionRecord",
+    "DBStockInfo",
+    "StockKline",
+    "db_connection",
+    "db_transaction",
+    "ensure_data_dir",
+    "get_asset_lens_db_path",
+    "get_db_path",
+    "get_stock_analysis_db_path",
+    "get_stock_klines_db_path",
+    "init_database",
+    "is_excluded_stock",
 ]
