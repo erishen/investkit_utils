@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from datetime import date, datetime
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from pathlib import Path
 from typing import Any, Optional, TypeVar, Union
 
@@ -241,7 +241,7 @@ def to_decimal(value: Any, precision: int = 2) -> Decimal:
     try:
         d = Decimal(str(value))
         return d.quantize(Decimal(10) ** -precision, rounding=ROUND_HALF_UP)
-    except:
+    except (ValueError, TypeError, InvalidOperation):
         return Decimal("0")
 
 

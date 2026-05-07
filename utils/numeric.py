@@ -24,7 +24,7 @@ def safe_divide(
         if float(denominator) == 0:
             return float(default)
         return float(numerator) / float(denominator)
-    except:
+    except (ValueError, TypeError, ZeroDivisionError):
         return float(default)
 
 

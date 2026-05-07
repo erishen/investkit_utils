@@ -103,11 +103,15 @@ class RedisCache(CacheBackend):
         return bool(self._client.exists(full_key))
 
     def clear(self) -> None:
-        """清空所有带前缀的缓存"""
+        """清空所有带前缀的缓存（使用 SCAN 替代 KEYS）"""
         pattern = f"{self._prefix}*"
-        keys = self._client.keys(pattern)
-        if keys:
-            self._client.delete(*keys)
+        cursor = 0
+        while True:
+            cursor, keys = self._client.scan(cursor, match=pattern, count=100)
+            if keys:
+                self._client.delete(*keys)
+            if cursor == 0:
+                break
 
     def keys(self, pattern: Optional[str] = None) -> list[str]:
         if pattern:
@@ -115,9 +119,15 @@ class RedisCache(CacheBackend):
         else:
             full_pattern = f"{self._prefix}*"
 
-        keys = self._client.keys(full_pattern)
+        result = []
+        cursor = 0
+        while True:
+            cursor, keys = self._client.scan(cursor, match=full_pattern, count=100)
+            result.extend(keys)
+            if cursor == 0:
+                break
         prefix_len = len(self._prefix)
-        return [key[prefix_len:] for key in keys]
+        return [key[prefix_len:] for key in result]
 
     def incr(self, key: str, amount: int = 1) -> int:
         full_key = self._make_key(key)

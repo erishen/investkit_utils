@@ -164,14 +164,22 @@ class ServiceRegistry:
     async def health_check_all(
         self, timeout: float = 5.0
     ) -> dict[str, HealthCheckResult]:
-        """检查所有服务健康状态"""
-        tasks = {
-            name: self.health_check(name, timeout)
-            for name in self._services
-        }
+        """检查所有服务健康状态（并发执行）"""
+        import asyncio
+
+        names = list(self._services.keys())
+        tasks = [self.health_check(name, timeout) for name in names]
+        results_list = await asyncio.gather(*tasks, return_exceptions=True)
         results = {}
-        for name, task in tasks.items():
-            results[name] = await task
+        for name, result in zip(names, results_list):
+            if isinstance(result, Exception):
+                results[name] = HealthCheckResult(
+                    service_name=name,
+                    status=ServiceStatus.UNHEALTHY,
+                    error=str(result),
+                )
+            else:
+                results[name] = result
         return results
 
     def get_health_status(self, name: str) -> Optional[HealthCheckResult]:

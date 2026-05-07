@@ -5,23 +5,12 @@
 
 from typing import Optional
 
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse, JSONResponse
-
-from investkit_utils.api_docs.discovery import (
-    ServiceRegistry,
-    ServiceInfo,
-    get_service_registry,
-)
-from investkit_utils.api_docs.services import APIService, INVESTKIT_SERVICES
-from investkit_utils.api_docs.openapi import aggregate_openapi_docs
-
 
 def serve_aggregated_docs(
-    services: Optional[list[APIService]] = None,
+    services: Optional[list] = None,
     main_info: Optional[dict] = None,
     port: int = 8080,
-    registry: Optional[ServiceRegistry] = None,
+    registry=None,
 ):
     """启动聚合 API 文档服务
 
@@ -34,6 +23,13 @@ def serve_aggregated_docs(
     Returns:
         FastAPI 应用
     """
+    from fastapi import FastAPI
+    from fastapi.responses import HTMLResponse, JSONResponse
+
+    from investkit_utils.api_docs.discovery import ServiceInfo, get_service_registry
+    from investkit_utils.api_docs.services import INVESTKIT_SERVICES
+    from investkit_utils.api_docs.openapi import aggregate_openapi_docs
+
     services = services or INVESTKIT_SERVICES
     registry = registry or get_service_registry()
 

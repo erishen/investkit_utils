@@ -289,14 +289,5 @@ class Config(BaseModel):
 
     @staticmethod
     def _deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
-        result = base.copy()
-        for key, value in override.items():
-            if (
-                key in result
-                and isinstance(result[key], dict)
-                and isinstance(value, dict)
-            ):
-                result[key] = Config._deep_merge(result[key], value)
-            else:
-                result[key] = value
-        return result
+        from investkit_utils.utils.data_utils import deep_merge
+        return deep_merge(base, override)

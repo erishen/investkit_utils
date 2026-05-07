@@ -19,6 +19,7 @@ from investkit_utils.config.loader import (
     get_config,
     reload_config,
     set_config_path,
+    clear_config_cache,
 )
 from investkit_utils.config.models import (
     AppConfig,
@@ -90,4 +91,5 @@ __all__ = [
     "get_config",
     "reload_config",
     "set_config_path",
+    "clear_config_cache",
 ]

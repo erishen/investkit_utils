@@ -40,7 +40,7 @@ def validate_amount(value: Union[str, int, float, Decimal]) -> bool:
     try:
         amount = Decimal(str(value))
         return amount >= 0
-    except:
+    except (ValueError, TypeError):
         return False
 
 
@@ -57,5 +57,5 @@ def validate_percentage(value: Union[str, int, float]) -> bool:
     try:
         pct = float(value)
         return -100 <= pct <= 100
-    except:
+    except (ValueError, TypeError):
         return False

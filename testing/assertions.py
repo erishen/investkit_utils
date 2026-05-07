@@ -1,7 +1,9 @@
 """断言工具"""
 
+from typing import Any, Callable
 
-def assert_dict_equal(actual: dict, expected: dict, ignore_keys: list = None) -> None:
+
+def assert_dict_equal(actual: dict, expected: dict, ignore_keys: list | None = None) -> None:
     """
     断言字典相等（可忽略特定键）
 
@@ -30,7 +32,7 @@ def assert_almost_equal(actual: float, expected: float, tolerance: float = 1e-6)
     assert abs(actual - expected) <= tolerance, f"Values not equal: {actual} != {expected}"
 
 
-def assert_list_contains(lst: list, item: any) -> None:
+def assert_list_contains(lst: list, item: Any) -> None:
     """
     断言列表包含元素
 
@@ -41,7 +43,7 @@ def assert_list_contains(lst: list, item: any) -> None:
     assert item in lst, f"Item {item} not in list {lst}"
 
 
-def assert_raises(exc_type: type, func: callable, *args, **kwargs) -> None:
+def assert_raises(exc_type: type, func: Callable, *args, **kwargs) -> None:
     """
     断言函数抛出异常
 
