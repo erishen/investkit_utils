@@ -2,7 +2,7 @@
 
 from logging import Formatter, LogRecord
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Optional
 
 from investkit_utils.log_utils.context import get_correlation_id
@@ -18,7 +18,7 @@ class JsonFormatter(Formatter):
 
     def format(self, record: LogRecord) -> str:
         log_data: dict[str, Any] = {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat() + "Z",
             "level": record.levelname,
             "message": record.getMessage(),
             "logger": record.name,
@@ -53,7 +53,7 @@ class TextFormatter(Formatter):
 
     def format(self, record: LogRecord) -> str:
         parts = [
-            datetime.utcnow().isoformat() + "Z",
+            datetime.now(timezone.utc).isoformat() + "Z",
             f"[{record.levelname:8}]",
         ]
 

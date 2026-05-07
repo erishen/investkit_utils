@@ -24,14 +24,15 @@ class CacheBackend(ABC):
     """
 
     @abstractmethod
-    def get(self, key: str) -> Optional[Any]:
+    def get(self, key: str, default: Optional[Any] = None) -> Optional[Any]:
         """获取缓存值
 
         Args:
             key: 缓存键
+            default: 缓存不存在时的默认值
 
         Returns:
-            缓存值，不存在则返回 None
+            缓存值，不存在则返回 default
         """
         pass
 
@@ -87,6 +88,8 @@ class CacheBackend(ABC):
         """
         pass
 
+    _MISSING = object()
+
     def get_or_set(
         self, key: str, default: Any, ttl: Optional[int] = None
     ) -> Any:
@@ -100,8 +103,8 @@ class CacheBackend(ABC):
         Returns:
             缓存值或默认值
         """
-        value = self.get(key)
-        if value is not None:
+        value = self.get(key, default=self._MISSING)
+        if value is not self._MISSING:
             return value
 
         if callable(default):
@@ -158,7 +161,7 @@ class CacheBackend(ABC):
         Returns:
             递增后的值
         """
-        value = self.get(key) or 0
+        value = self.get(key, default=0)
         new_value = int(value) + amount
         self.set(key, new_value)
         return new_value

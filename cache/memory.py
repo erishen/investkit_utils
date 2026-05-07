@@ -54,14 +54,14 @@ class MemoryCache(CacheBackend):
         self._lock = Lock()
         self._default_ttl = default_ttl
 
-    def get(self, key: str) -> Optional[Any]:
+    def get(self, key: str, default: Optional[Any] = None) -> Optional[Any]:
         with self._lock:
             entry = self._cache.get(key)
             if entry is None:
-                return None
+                return default
             if entry.is_expired():
                 del self._cache[key]
-                return None
+                return default
             return entry.value
 
     def set(self, key: str, value: Any, ttl: Optional[int] = None) -> None:

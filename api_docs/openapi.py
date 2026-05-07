@@ -10,10 +10,13 @@
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Optional
 
 from investkit_utils.api_docs.services import APIService
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from investkit_utils.cache import CacheBackend
@@ -147,7 +150,7 @@ async def fetch_openapi_spec(
 
             return spec
     except Exception as e:
-        print(f"Failed to fetch OpenAPI spec from {service.name}: {e}")
+        logger.warning("Failed to fetch OpenAPI spec from %s: %s", service.name, e)
         return None
 
 
@@ -168,7 +171,7 @@ def load_openapi_spec_from_file(file_path: str) -> Optional[dict]:
         with open(path, encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
-        print(f"Failed to load OpenAPI spec from {file_path}: {e}")
+        logger.warning("Failed to load OpenAPI spec from %s: %s", file_path, e)
         return None
 
 

@@ -8,6 +8,8 @@ from __future__ import annotations
 import functools
 import hashlib
 import inspect
+
+_CACHE_MISS = object()
 from typing import Any, Callable, Optional, TypeVar, Union
 
 from investkit_utils.cache.base import CacheBackend
@@ -83,8 +85,8 @@ def cached(
 
             key = _make_cache_key(func, args, kwargs, key_prefix)
 
-            cached_value = cache_instance.get(key)
-            if cached_value is not None:
+            cached_value = cache_instance.get(key, default=_CACHE_MISS)
+            if cached_value is not _CACHE_MISS:
                 return cached_value
 
             result = func(*args, **kwargs)
@@ -136,8 +138,8 @@ def cached_async(
 
             key = _make_cache_key(func, args, kwargs, key_prefix)
 
-            cached_value = cache_instance.get(key)
-            if cached_value is not None:
+            cached_value = cache_instance.get(key, default=_CACHE_MISS)
+            if cached_value is not _CACHE_MISS:
                 return cached_value
 
             result = await func(*args, **kwargs)

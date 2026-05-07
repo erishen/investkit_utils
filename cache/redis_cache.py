@@ -81,9 +81,11 @@ class RedisCache(CacheBackend):
             return None
         return json.loads(value)
 
-    def get(self, key: str) -> Optional[Any]:
+    def get(self, key: str, default: Optional[Any] = None) -> Optional[Any]:
         full_key = self._make_key(key)
         value = self._client.get(full_key)
+        if value is None:
+            return default
         return self._deserialize(value)
 
     def set(self, key: str, value: Any, ttl: Optional[int] = None) -> None:
