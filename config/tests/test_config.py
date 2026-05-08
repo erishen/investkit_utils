@@ -9,10 +9,10 @@ import pytest
 from investkit_utils.config import (
     Config,
     ConfigLoader,
+    clear_config_cache,
     get_config,
     reload_config,
     set_config_path,
-    clear_config_cache,
 )
 from investkit_utils.config.models import (
     AppConfig,

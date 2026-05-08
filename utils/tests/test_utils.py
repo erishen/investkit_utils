@@ -1,12 +1,9 @@
 """工具函数测试"""
 
-import json
 import os
 import tempfile
-from datetime import date, datetime
+from datetime import date
 from decimal import Decimal
-
-import pytest
 
 from investkit_utils.utils import (
     calculate_cagr,
@@ -18,7 +15,6 @@ from investkit_utils.utils import (
     calculate_sharpe_ratio,
     calculate_win_rate,
     chunk_list,
-    clean_dir,
     copy_file,
     deep_merge,
     ensure_dir,
@@ -160,7 +156,7 @@ class TestFileUtils:
 
     def test_ensure_dir(self):
         dir_path = os.path.join(self.temp_dir, "subdir", "nested")
-        result = ensure_dir(dir_path)
+        ensure_dir(dir_path)
         assert os.path.exists(dir_path)
 
     def test_write_and_read_json(self):

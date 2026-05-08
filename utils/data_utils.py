@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-import json
 from datetime import date, datetime
-from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
-from pathlib import Path
-from typing import Any, Optional, TypeVar, Union
+from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
+from typing import Any, TypeVar
 
 T = TypeVar("T")
 
@@ -110,7 +108,7 @@ def chunk_list(lst: list[T], chunk_size: int) -> list[list[T]]:
     return [lst[i : i + chunk_size] for i in range(0, len(lst), chunk_size)]
 
 
-def unique_list(lst: list[T], key: Optional[str] = None) -> list[T]:
+def unique_list(lst: list[T], key: str | None = None) -> list[T]:
     """列表去重 (保持顺序)
 
     Args:
@@ -249,7 +247,7 @@ def batch_process(
     items: list[T],
     process_func: callable,
     batch_size: int = 100,
-    on_batch_complete: Optional[callable] = None,
+    on_batch_complete: callable | None = None,
 ) -> list[Any]:
     """批量处理
 

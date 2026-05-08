@@ -1,22 +1,21 @@
 """InvestKit 异常模块测试"""
 
-import pytest
 
 from investkit_utils.exceptions import (
-    InvestKitError,
-    ValidationError,
-    NotFoundError,
     AuthenticationError,
     AuthorizationError,
-    RateLimitError,
-    ExternalServiceError,
-    DataError,
-    ConfigurationError,
     CacheError,
+    ConfigurationError,
     DatabaseError,
-    MLModelError,
+    DataError,
+    ExternalServiceError,
+    InvestKitError,
     LLMError,
+    MLModelError,
+    NotFoundError,
+    RateLimitError,
     TradingError,
+    ValidationError,
     handle_exception,
 )
 

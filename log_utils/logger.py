@@ -1,7 +1,6 @@
 """自定义 Logger 类"""
 
-from logging import Logger, INFO, ERROR, WARNING, DEBUG
-from typing import Any, Optional
+from logging import DEBUG, ERROR, INFO, WARNING, Logger
 
 
 class InvestKitLogger(Logger):
@@ -13,7 +12,7 @@ class InvestKitLogger(Logger):
         msg: str,
         args: tuple,
         exc_info=None,
-        extra: Optional[dict] = None,
+        extra: dict | None = None,
         **kwargs
     ) -> None:
         if extra:
@@ -22,18 +21,18 @@ class InvestKitLogger(Logger):
             kwargs["extra"]["extra_data"] = extra
         super()._log(level, msg, args, exc_info=exc_info, **kwargs)
 
-    def info_with_data(self, msg: str, data: Optional[dict] = None, **kwargs) -> None:
+    def info_with_data(self, msg: str, data: dict | None = None, **kwargs) -> None:
         """带数据的 INFO 日志"""
         self._log_with_extra(INFO, msg, (), extra=data, **kwargs)
 
-    def error_with_data(self, msg: str, data: Optional[dict] = None, **kwargs) -> None:
+    def error_with_data(self, msg: str, data: dict | None = None, **kwargs) -> None:
         """带数据的 ERROR 日志"""
         self._log_with_extra(ERROR, msg, (), extra=data, **kwargs)
 
-    def warning_with_data(self, msg: str, data: Optional[dict] = None, **kwargs) -> None:
+    def warning_with_data(self, msg: str, data: dict | None = None, **kwargs) -> None:
         """带数据的 WARNING 日志"""
         self._log_with_extra(WARNING, msg, (), extra=data, **kwargs)
 
-    def debug_with_data(self, msg: str, data: Optional[dict] = None, **kwargs) -> None:
+    def debug_with_data(self, msg: str, data: dict | None = None, **kwargs) -> None:
         """带数据的 DEBUG 日志"""
         self._log_with_extra(DEBUG, msg, (), extra=data, **kwargs)

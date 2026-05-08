@@ -12,7 +12,7 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from investkit_utils.api_docs.services import APIService
 
@@ -21,11 +21,11 @@ logger = logging.getLogger(__name__)
 if TYPE_CHECKING:
     from investkit_utils.cache import CacheBackend
 
-_cache: Optional[CacheBackend] = None
+_cache: CacheBackend | None = None
 _cache_ttl: int = 300  # 5 minutes
 
 
-def set_cache(cache: Optional[CacheBackend], ttl: int = 300) -> None:
+def set_cache(cache: CacheBackend | None, ttl: int = 300) -> None:
     """设置缓存
 
     Args:
@@ -39,7 +39,7 @@ def set_cache(cache: Optional[CacheBackend], ttl: int = 300) -> None:
 
 def merge_openapi_specs(
     specs: list[dict],
-    main_info: Optional[dict] = None,
+    main_info: dict | None = None,
 ) -> dict:
     """合并多个 OpenAPI 规范
 
@@ -118,7 +118,7 @@ def merge_openapi_specs(
 
 async def fetch_openapi_spec(
     service: APIService, use_cache: bool = True
-) -> Optional[dict]:
+) -> dict | None:
     """获取服务的 OpenAPI 规范
 
     Args:
@@ -154,7 +154,7 @@ async def fetch_openapi_spec(
         return None
 
 
-def load_openapi_spec_from_file(file_path: str) -> Optional[dict]:
+def load_openapi_spec_from_file(file_path: str) -> dict | None:
     """从文件加载 OpenAPI 规范
 
     Args:
@@ -176,8 +176,8 @@ def load_openapi_spec_from_file(file_path: str) -> Optional[dict]:
 
 
 async def aggregate_openapi_docs(
-    services: Optional[list[APIService]] = None,
-    main_info: Optional[dict] = None,
+    services: list[APIService] | None = None,
+    main_info: dict | None = None,
     use_cache: bool = True,
 ) -> dict:
     """聚合所有服务的 OpenAPI 文档
@@ -206,7 +206,7 @@ async def aggregate_openapi_docs(
 
 def aggregate_from_files(
     spec_files: list[tuple[str, str]],
-    main_info: Optional[dict] = None,
+    main_info: dict | None = None,
 ) -> dict:
     """从文件聚合 OpenAPI 文档
 

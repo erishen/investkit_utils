@@ -1,11 +1,10 @@
 """日期时间工具"""
 
 import re
-from datetime import datetime, date, timedelta
-from typing import Union, Optional
+from datetime import date, datetime, timedelta
 
 
-def parse_date(value: Union[str, date, datetime, None]) -> Optional[date]:
+def parse_date(value: str | date | datetime | None) -> date | None:
     """
     解析日期字符串
 
@@ -45,7 +44,7 @@ def parse_date(value: Union[str, date, datetime, None]) -> Optional[date]:
     return None
 
 
-def format_date(value: Union[date, datetime, None], fmt: str = "%Y-%m-%d") -> Optional[str]:
+def format_date(value: date | datetime | None, fmt: str = "%Y-%m-%d") -> str | None:
     """
     格式化日期
 
@@ -83,7 +82,7 @@ def get_trading_days(start_date: date, end_date: date) -> list[date]:
     return trading_days
 
 
-def is_trading_day(d: Optional[date] = None) -> bool:
+def is_trading_day(d: date | None = None) -> bool:
     """
     判断是否为交易日（排除周末）
 

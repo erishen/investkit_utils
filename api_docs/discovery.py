@@ -6,7 +6,7 @@ import asyncio
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 
 class ServiceStatus(str, Enum):
@@ -24,9 +24,9 @@ class HealthCheckResult:
 
     service_name: str
     status: ServiceStatus
-    response_time_ms: Optional[float] = None
+    response_time_ms: float | None = None
     last_check: datetime = field(default_factory=datetime.now)
-    error: Optional[str] = None
+    error: str | None = None
     details: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -94,7 +94,7 @@ class ServiceRegistry:
             return True
         return False
 
-    def get(self, name: str) -> Optional[ServiceInfo]:
+    def get(self, name: str) -> ServiceInfo | None:
         """获取服务"""
         return self._services.get(name)
 
@@ -165,13 +165,12 @@ class ServiceRegistry:
         self, timeout: float = 5.0
     ) -> dict[str, HealthCheckResult]:
         """检查所有服务健康状态（并发执行）"""
-        import asyncio
 
         names = list(self._services.keys())
         tasks = [self.health_check(name, timeout) for name in names]
         results_list = await asyncio.gather(*tasks, return_exceptions=True)
         results = {}
-        for name, result in zip(names, results_list):
+        for name, result in zip(names, results_list, strict=True):
             if isinstance(result, Exception):
                 results[name] = HealthCheckResult(
                     service_name=name,
@@ -182,7 +181,7 @@ class ServiceRegistry:
                 results[name] = result
         return results
 
-    def get_health_status(self, name: str) -> Optional[HealthCheckResult]:
+    def get_health_status(self, name: str) -> HealthCheckResult | None:
         """获取服务健康状态"""
         return self._health_status.get(name)
 
@@ -208,7 +207,7 @@ class ServiceRegistry:
         return name in self._services
 
 
-_default_registry: Optional[ServiceRegistry] = None
+_default_registry: ServiceRegistry | None = None
 
 
 def get_service_registry() -> ServiceRegistry:
@@ -224,7 +223,7 @@ def register_service(service: ServiceInfo) -> None:
     get_service_registry().register(service)
 
 
-def get_service(name: str) -> Optional[ServiceInfo]:
+def get_service(name: str) -> ServiceInfo | None:
     """从默认注册中心获取服务"""
     return get_service_registry().get(name)
 

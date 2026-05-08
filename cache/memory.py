@@ -8,7 +8,7 @@ from __future__ import annotations
 import fnmatch
 import time
 from threading import Lock
-from typing import Any, Optional
+from typing import Any
 
 from investkit_utils.cache.base import CacheBackend
 
@@ -18,7 +18,7 @@ class CacheEntry:
 
     __slots__ = ["value", "expires_at"]
 
-    def __init__(self, value: Any, ttl: Optional[int] = None):
+    def __init__(self, value: Any, ttl: int | None = None):
         self.value = value
         self.expires_at = time.time() + ttl if ttl else None
 
@@ -44,7 +44,7 @@ class MemoryCache(CacheBackend):
         value = cache.get("key")
     """
 
-    def __init__(self, default_ttl: Optional[int] = None):
+    def __init__(self, default_ttl: int | None = None):
         """初始化内存缓存
 
         Args:
@@ -54,7 +54,7 @@ class MemoryCache(CacheBackend):
         self._lock = Lock()
         self._default_ttl = default_ttl
 
-    def get(self, key: str, default: Optional[Any] = None) -> Optional[Any]:
+    def get(self, key: str, default: Any | None = None) -> Any | None:
         with self._lock:
             entry = self._cache.get(key)
             if entry is None:
@@ -64,7 +64,7 @@ class MemoryCache(CacheBackend):
                 return default
             return entry.value
 
-    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> None:
+    def set(self, key: str, value: Any, ttl: int | None = None) -> None:
         if ttl is None:
             ttl = self._default_ttl
         with self._lock:
@@ -91,7 +91,7 @@ class MemoryCache(CacheBackend):
         with self._lock:
             self._cache.clear()
 
-    def keys(self, pattern: Optional[str] = None) -> list[str]:
+    def keys(self, pattern: str | None = None) -> list[str]:
         with self._lock:
             self._cleanup_expired()
             if pattern is None:

@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date, timedelta
-from decimal import Decimal, ROUND_HALF_UP
-from typing import Iterable, Optional
+from collections.abc import Iterable
 
 
 def calculate_irr(
@@ -12,7 +10,7 @@ def calculate_irr(
     guess: float = 0.1,
     max_iterations: int = 1000,
     tolerance: float = 1e-6,
-) -> Optional[float]:
+) -> float | None:
     """计算内部收益率 (IRR)
 
     使用牛顿迭代法求解使 NPV = 0 的折现率。
@@ -59,7 +57,7 @@ def calculate_cagr(
     start_value: float,
     end_value: float,
     years: float,
-) -> Optional[float]:
+) -> float | None:
     """计算复合年增长率 (CAGR)
 
     Args:
@@ -83,7 +81,7 @@ def calculate_cagr(
 def calculate_sharpe_ratio(
     returns: Iterable[float],
     risk_free_rate: float = 0.03,
-) -> Optional[float]:
+) -> float | None:
     """计算夏普比率
 
     Args:
@@ -203,7 +201,7 @@ def calculate_position_size(
     total_capital: float,
     risk_per_trade: float = 0.02,
     entry_price: float = 0,
-    stop_loss_price: Optional[float] = None,
+    stop_loss_price: float | None = None,
 ) -> float:
     """计算仓位大小
 

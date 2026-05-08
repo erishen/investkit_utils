@@ -1,15 +1,13 @@
 """API 文档模块测试"""
 
-import pytest
 
 from investkit_utils.api_docs import (
-    APIService,
     INVESTKIT_SERVICES,
-    merge_openapi_specs,
-    load_openapi_spec_from_file,
-    ServiceRegistry,
+    APIService,
     ServiceInfo,
-    ServiceStatus,
+    ServiceRegistry,
+    load_openapi_spec_from_file,
+    merge_openapi_specs,
 )
 
 

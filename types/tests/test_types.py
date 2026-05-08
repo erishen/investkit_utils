@@ -1,22 +1,21 @@
 """InvestKit 类型模块测试"""
 
-import pytest
 
 from investkit_utils.types import (
-    SignalType,
-    OrderType,
-    Market,
     AssetType,
-    RiskLevel,
-    Price,
+    Market,
+    MLPrediction,
     Order,
+    OrderStatus,
+    OrderType,
+    Portfolio,
+    Position,
+    Price,
+    RiskLevel,
+    RiskMetrics,
+    SignalType,
     StockInfo,
     TradeSignal,
-    Position,
-    Portfolio,
-    RiskMetrics,
-    MLPrediction,
-    OrderStatus,
 )
 
 

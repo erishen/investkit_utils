@@ -16,14 +16,14 @@
 
 from investkit_utils.config.loader import (
     ConfigLoader,
+    clear_config_cache,
     get_config,
     reload_config,
     set_config_path,
-    clear_config_cache,
 )
 from investkit_utils.config.models import (
-    AppConfig,
     ApiConfig,
+    AppConfig,
     CacheConfig,
     CacheRedisConfig,
     Config,

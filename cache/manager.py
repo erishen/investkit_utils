@@ -5,16 +5,14 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from investkit_utils.cache.base import CacheBackend
 from investkit_utils.cache.memory import MemoryCache
 
 _cache_instances: dict[str, CacheBackend] = {}
-_default_cache: Optional[CacheBackend] = None
+_default_cache: CacheBackend | None = None
 
 
-def get_cache(name: Optional[str] = None) -> CacheBackend:
+def get_cache(name: str | None = None) -> CacheBackend:
     """获取缓存实例
 
     Args:
@@ -37,8 +35,8 @@ def get_cache(name: Optional[str] = None) -> CacheBackend:
 
 
 def get_memory_cache(
-    name: Optional[str] = None,
-    default_ttl: Optional[int] = None,
+    name: str | None = None,
+    default_ttl: int | None = None,
 ) -> MemoryCache:
     """获取内存缓存实例
 
@@ -61,9 +59,9 @@ def get_redis_cache(
     host: str = "localhost",
     port: int = 6379,
     db: int = 0,
-    password: Optional[str] = None,
+    password: str | None = None,
     prefix: str = "investkit:",
-    name: Optional[str] = None,
+    name: str | None = None,
 ) -> CacheBackend:
     """获取 Redis 缓存实例
 

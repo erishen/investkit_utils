@@ -8,25 +8,23 @@ InvestKit 共享类型定义
 """
 
 from investkit_utils.types.enums import (
-    SignalType,
-    OrderType,
-    OrderStatus,
-    Market,
     AssetType,
+    Market,
+    OrderStatus,
+    OrderType,
     RiskLevel,
+    SignalType,
 )
-
 from investkit_utils.types.models import (
-    StockInfo,
-    Price,
-    TradeSignal,
-    Position,
-    Portfolio,
-    Order,
-    RiskMetrics,
     MLPrediction,
+    Order,
+    Portfolio,
+    Position,
+    Price,
+    RiskMetrics,
+    StockInfo,
+    TradeSignal,
 )
-
 
 __all__ = [
     "SignalType",

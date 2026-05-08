@@ -10,34 +10,30 @@ InvestKit API 文档聚合模块
     app = serve_aggregated_docs()
 """
 
-from investkit_utils.api_docs.services import (
-    APIService,
-    INVESTKIT_SERVICES,
-)
-
-from investkit_utils.api_docs.openapi import (
-    merge_openapi_specs,
-    fetch_openapi_spec,
-    aggregate_openapi_docs,
-    load_openapi_spec_from_file,
-    aggregate_from_files,
-    set_cache,
-    clear_cache,
-)
-
 from investkit_utils.api_docs.discovery import (
-    ServiceRegistry,
-    ServiceInfo,
-    ServiceStatus,
     HealthCheckResult,
+    ServiceInfo,
+    ServiceRegistry,
+    ServiceStatus,
+    get_all_services,
+    get_service,
     get_service_registry,
     register_service,
-    get_service,
-    get_all_services,
 )
-
+from investkit_utils.api_docs.openapi import (
+    aggregate_from_files,
+    aggregate_openapi_docs,
+    clear_cache,
+    fetch_openapi_spec,
+    load_openapi_spec_from_file,
+    merge_openapi_specs,
+    set_cache,
+)
 from investkit_utils.api_docs.server import serve_aggregated_docs
-
+from investkit_utils.api_docs.services import (
+    INVESTKIT_SERVICES,
+    APIService,
+)
 
 __all__ = [
     "APIService",

@@ -12,7 +12,7 @@ from __future__ import annotations
 import os
 import re
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import yaml
 
@@ -20,7 +20,7 @@ from investkit_utils.config.models import Config
 
 _config_cache: dict[str, Config] = {}
 _config_paths: dict[str, Path] = {}
-_default_config_path: Optional[Path] = None
+_default_config_path: Path | None = None
 
 
 class ConfigLoader:
@@ -95,8 +95,8 @@ class ConfigLoader:
     def load_for_project(
         cls,
         project_name: str,
-        base_path: Optional[Path] = None,
-        config_dir: Optional[Path] = None,
+        base_path: Path | None = None,
+        config_dir: Path | None = None,
     ) -> Config:
         """为特定项目加载配置
 
@@ -160,7 +160,7 @@ class ConfigLoader:
         return deep_merge(base, override)
 
 
-def get_config(project_name: Optional[str] = None) -> Config:
+def get_config(project_name: str | None = None) -> Config:
     """获取配置
 
     如果指定了 project_name，返回该项目的配置。
@@ -190,7 +190,7 @@ def get_config(project_name: Optional[str] = None) -> Config:
     return config
 
 
-def reload_config(project_name: Optional[str] = None) -> Config:
+def reload_config(project_name: str | None = None) -> Config:
     """重新加载配置
 
     清除缓存并重新加载配置。
@@ -210,7 +210,7 @@ def reload_config(project_name: Optional[str] = None) -> Config:
     return get_config(project_name)
 
 
-def set_config_path(path: str | Path, project_name: Optional[str] = None) -> None:
+def set_config_path(path: str | Path, project_name: str | None = None) -> None:
     """设置配置文件路径
 
     Args:

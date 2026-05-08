@@ -1,9 +1,10 @@
 """重试装饰器"""
 
-import time
-import functools
 import asyncio
-from typing import Callable, Optional, Type, TypeVar, Tuple
+import functools
+import time
+from collections.abc import Callable
+from typing import TypeVar
 
 T = TypeVar("T")
 
@@ -12,8 +13,8 @@ def retry(
     max_attempts: int = 3,
     delay: float = 1.0,
     backoff: float = 2.0,
-    exceptions: Tuple[Type[Exception], ...] = (Exception,),
-    on_retry: Optional[Callable[[Exception, int], None]] = None,
+    exceptions: tuple[type[Exception], ...] = (Exception,),
+    on_retry: Callable[[Exception, int], None] | None = None,
 ):
     """
     重试装饰器
@@ -60,7 +61,7 @@ def retry_async(
     max_attempts: int = 3,
     delay: float = 1.0,
     backoff: float = 2.0,
-    exceptions: Tuple[Type[Exception], ...] = (Exception,),
+    exceptions: tuple[type[Exception], ...] = (Exception,),
 ):
     """
     异步重试装饰器

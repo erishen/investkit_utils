@@ -3,14 +3,13 @@
 from __future__ import annotations
 
 import json
-import os
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 
 
-def ensure_dir(path: Union[str, Path]) -> Path:
+def ensure_dir(path: str | Path) -> Path:
     """确保目录存在
 
     Args:
@@ -28,7 +27,7 @@ def ensure_dir(path: Union[str, Path]) -> Path:
     return p
 
 
-def read_json(file_path: Union[str, Path], default: Any = None) -> Any:
+def read_json(file_path: str | Path, default: Any = None) -> Any:
     """读取 JSON 文件
 
     Args:
@@ -51,7 +50,7 @@ def read_json(file_path: Union[str, Path], default: Any = None) -> Any:
 
 
 def write_json(
-    file_path: Union[str, Path],
+    file_path: str | Path,
     data: Any,
     indent: int = 2,
     ensure_ascii: bool = False,
@@ -74,7 +73,7 @@ def write_json(
         json.dump(data, f, indent=indent, ensure_ascii=ensure_ascii)
 
 
-def read_text(file_path: Union[str, Path], default: str = "") -> str:
+def read_text(file_path: str | Path, default: str = "") -> str:
     """读取文本文件
 
     Args:
@@ -97,7 +96,7 @@ def read_text(file_path: Union[str, Path], default: str = "") -> str:
 
 
 def write_text(
-    file_path: Union[str, Path],
+    file_path: str | Path,
     content: str,
     append: bool = False,
 ) -> None:
@@ -119,7 +118,7 @@ def write_text(
         f.write(content)
 
 
-def read_lines(file_path: Union[str, Path]) -> list[str]:
+def read_lines(file_path: str | Path) -> list[str]:
     """读取文件行
 
     Args:
@@ -140,7 +139,7 @@ def read_lines(file_path: Union[str, Path]) -> list[str]:
         return [line.strip() for line in f if line.strip()]
 
 
-def get_file_info(file_path: Union[str, Path]) -> Optional[dict[str, Any]]:
+def get_file_info(file_path: str | Path) -> dict[str, Any] | None:
     """获取文件信息
 
     Args:
@@ -194,7 +193,7 @@ def format_file_size(size_bytes: int) -> str:
 
 
 def clean_dir(
-    dir_path: Union[str, Path],
+    dir_path: str | Path,
     pattern: str = "*",
     keep_dir: bool = True,
 ) -> int:
@@ -232,8 +231,8 @@ def clean_dir(
 
 
 def copy_file(
-    src: Union[str, Path],
-    dst: Union[str, Path],
+    src: str | Path,
+    dst: str | Path,
     overwrite: bool = False,
 ) -> bool:
     """复制文件
@@ -265,8 +264,8 @@ def copy_file(
 
 
 def move_file(
-    src: Union[str, Path],
-    dst: Union[str, Path],
+    src: str | Path,
+    dst: str | Path,
     overwrite: bool = False,
 ) -> bool:
     """移动文件
@@ -298,7 +297,7 @@ def move_file(
 
 
 def find_files(
-    dir_path: Union[str, Path],
+    dir_path: str | Path,
     pattern: str = "*",
     recursive: bool = False,
 ) -> list[Path]:
@@ -326,9 +325,9 @@ def find_files(
 
 
 def get_latest_file(
-    dir_path: Union[str, Path],
+    dir_path: str | Path,
     pattern: str = "*",
-) -> Optional[Path]:
+) -> Path | None:
     """获取最新文件
 
     Args:

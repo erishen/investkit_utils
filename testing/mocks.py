@@ -1,14 +1,14 @@
 """Mock 工具"""
 
-from unittest.mock import Mock
-from typing import Any, Optional
 import json
+from typing import Any
+from unittest.mock import Mock
 
 
 def mock_response(
     data: Any,
     status_code: int = 200,
-    headers: Optional[dict] = None,
+    headers: dict | None = None,
 ) -> Mock:
     """
     创建 Mock HTTP 响应

@@ -2,13 +2,13 @@
 
 from dataclasses import dataclass, field
 from datetime import date, datetime
-from typing import Optional, Literal, List
+from typing import Literal
 
 from investkit_utils.types.enums import (
-    SignalType,
-    OrderType,
-    OrderStatus,
     Market,
+    OrderStatus,
+    OrderType,
+    SignalType,
 )
 
 
@@ -18,11 +18,11 @@ class StockInfo:
     code: str
     name: str
     market: Market
-    industry: Optional[str] = None
-    sector: Optional[str] = None
-    list_date: Optional[date] = None
-    total_shares: Optional[float] = None
-    float_shares: Optional[float] = None
+    industry: str | None = None
+    sector: str | None = None
+    list_date: date | None = None
+    total_shares: float | None = None
+    float_shares: float | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -45,8 +45,8 @@ class Price:
     low: float
     close: float
     volume: float
-    amount: Optional[float] = None
-    timestamp: Optional[datetime] = None
+    amount: float | None = None
+    timestamp: datetime | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -65,11 +65,11 @@ class TradeSignal:
     """交易信号"""
     symbol: str
     signal_type: SignalType
-    price: Optional[float] = None
-    quantity: Optional[float] = None
-    confidence: Optional[float] = None
-    reason: Optional[str] = None
-    indicators: List[str] = field(default_factory=list)
+    price: float | None = None
+    quantity: float | None = None
+    confidence: float | None = None
+    reason: str | None = None
+    indicators: list[str] = field(default_factory=list)
     timestamp: datetime = field(default_factory=datetime.now)
 
     def to_dict(self) -> dict:
@@ -91,10 +91,10 @@ class Position:
     symbol: str
     quantity: float
     cost_price: float
-    current_price: Optional[float] = None
-    market_value: Optional[float] = None
-    profit_loss: Optional[float] = None
-    profit_loss_pct: Optional[float] = None
+    current_price: float | None = None
+    market_value: float | None = None
+    profit_loss: float | None = None
+    profit_loss_pct: float | None = None
 
     def __post_init__(self):
         if self.current_price is not None:
@@ -119,12 +119,12 @@ class Position:
 class Portfolio:
     """投资组合"""
     name: str
-    positions: List[Position] = field(default_factory=list)
+    positions: list[Position] = field(default_factory=list)
     cash: float = 0.0
-    total_value: Optional[float] = None
-    total_cost: Optional[float] = None
-    total_profit_loss: Optional[float] = None
-    total_profit_loss_pct: Optional[float] = None
+    total_value: float | None = None
+    total_cost: float | None = None
+    total_profit_loss: float | None = None
+    total_profit_loss_pct: float | None = None
 
     def calculate_totals(self) -> None:
         """计算组合总计"""
@@ -155,13 +155,13 @@ class Order:
     side: Literal["BUY", "SELL"]
     order_type: OrderType
     quantity: float
-    price: Optional[float] = None
+    price: float | None = None
     status: OrderStatus = OrderStatus.PENDING
-    order_id: Optional[str] = None
+    order_id: str | None = None
     created_at: datetime = field(default_factory=datetime.now)
-    filled_at: Optional[datetime] = None
-    filled_price: Optional[float] = None
-    filled_quantity: Optional[float] = None
+    filled_at: datetime | None = None
+    filled_price: float | None = None
+    filled_quantity: float | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -182,15 +182,15 @@ class Order:
 @dataclass
 class RiskMetrics:
     """风险指标"""
-    symbol: Optional[str] = None
-    var_95: Optional[float] = None
-    var_99: Optional[float] = None
-    max_drawdown: Optional[float] = None
-    sharpe_ratio: Optional[float] = None
-    sortino_ratio: Optional[float] = None
-    volatility: Optional[float] = None
-    beta: Optional[float] = None
-    alpha: Optional[float] = None
+    symbol: str | None = None
+    var_95: float | None = None
+    var_99: float | None = None
+    max_drawdown: float | None = None
+    sharpe_ratio: float | None = None
+    sortino_ratio: float | None = None
+    volatility: float | None = None
+    beta: float | None = None
+    alpha: float | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -213,7 +213,7 @@ class MLPrediction:
     prediction: float
     confidence: float
     model_name: str
-    features_used: List[str] = field(default_factory=list)
+    features_used: list[str] = field(default_factory=list)
     timestamp: datetime = field(default_factory=datetime.now)
 
     def to_dict(self) -> dict:

@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any
 
 
 class CacheBackend(ABC):
@@ -24,7 +24,7 @@ class CacheBackend(ABC):
     """
 
     @abstractmethod
-    def get(self, key: str, default: Optional[Any] = None) -> Optional[Any]:
+    def get(self, key: str, default: Any | None = None) -> Any | None:
         """获取缓存值
 
         Args:
@@ -37,7 +37,7 @@ class CacheBackend(ABC):
         pass
 
     @abstractmethod
-    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> None:
+    def set(self, key: str, value: Any, ttl: int | None = None) -> None:
         """设置缓存值
 
         Args:
@@ -77,7 +77,7 @@ class CacheBackend(ABC):
         pass
 
     @abstractmethod
-    def keys(self, pattern: Optional[str] = None) -> list[str]:
+    def keys(self, pattern: str | None = None) -> list[str]:
         """获取所有缓存键
 
         Args:
@@ -91,7 +91,7 @@ class CacheBackend(ABC):
     _MISSING = object()
 
     def get_or_set(
-        self, key: str, default: Any, ttl: Optional[int] = None
+        self, key: str, default: Any, ttl: int | None = None
     ) -> Any:
         """获取缓存值，不存在则设置默认值
 
@@ -126,7 +126,7 @@ class CacheBackend(ABC):
         """
         return {key: self.get(key) for key in keys}
 
-    def set_many(self, mapping: dict[str, Any], ttl: Optional[int] = None) -> None:
+    def set_many(self, mapping: dict[str, Any], ttl: int | None = None) -> None:
         """批量设置缓存值
 
         Args:

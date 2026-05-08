@@ -139,5 +139,5 @@ def init_database(db_url: str = "sqlite:///./data/asset_lens.db"):
         engine_kwargs["pool_timeout"] = 30
     engine = create_engine(db_url, **engine_kwargs)
     Base.metadata.create_all(engine)
-    Session = sessionmaker(bind=engine)
+    Session = sessionmaker(bind=engine)  # noqa: N806
     return engine, Session

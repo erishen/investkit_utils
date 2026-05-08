@@ -2,7 +2,6 @@
 
 import random
 from datetime import date, timedelta
-from typing import Optional, List
 
 
 def generate_test_stock_data(
@@ -10,7 +9,7 @@ def generate_test_stock_data(
     days: int = 30,
     start_price: float = 10.0,
     volatility: float = 0.02,
-) -> List[dict]:
+) -> list[dict]:
     """
     生成测试股票数据
 
@@ -52,7 +51,7 @@ def generate_test_stock_data(
 
 
 def generate_test_portfolio(
-    symbols: Optional[List[str]] = None,
+    symbols: list[str] | None = None,
     cash: float = 10000.0,
 ) -> dict:
     """

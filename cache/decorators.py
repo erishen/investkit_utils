@@ -8,12 +8,13 @@ from __future__ import annotations
 import functools
 import hashlib
 import inspect
-
-_CACHE_MISS = object()
-from typing import Any, Callable, Optional, TypeVar, Union
+from collections.abc import Callable
+from typing import Any, TypeVar
 
 from investkit_utils.cache.base import CacheBackend
 from investkit_utils.cache.manager import get_cache
+
+_CACHE_MISS = object()
 
 T = TypeVar("T")
 F = Callable[..., T]
@@ -23,7 +24,7 @@ def _make_cache_key(
     func: Callable,
     args: tuple,
     kwargs: dict,
-    key_prefix: Optional[str] = None,
+    key_prefix: str | None = None,
 ) -> str:
     """生成缓存键
 
@@ -52,9 +53,9 @@ def _make_cache_key(
 
 
 def cached(
-    ttl: Optional[int] = None,
-    key_prefix: Optional[str] = None,
-    cache: Optional[Union[CacheBackend, str]] = None,
+    ttl: int | None = None,
+    key_prefix: str | None = None,
+    cache: CacheBackend | str | None = None,
 ) -> Callable[[F], F]:
     """缓存装饰器 (同步函数)
 
@@ -105,9 +106,9 @@ def cached(
 
 
 def cached_async(
-    ttl: Optional[int] = None,
-    key_prefix: Optional[str] = None,
-    cache: Optional[Union[CacheBackend, str]] = None,
+    ttl: int | None = None,
+    key_prefix: str | None = None,
+    cache: CacheBackend | str | None = None,
 ) -> Callable[[F], F]:
     """缓存装饰器 (异步函数)
 
@@ -158,11 +159,11 @@ def cached_async(
 
 
 def cache_result(
-    func: Optional[F] = None,
+    func: F | None = None,
     *,
-    ttl: Optional[int] = None,
-    key_prefix: Optional[str] = None,
-) -> Union[F, Callable[[F], F]]:
+    ttl: int | None = None,
+    key_prefix: str | None = None,
+) -> F | Callable[[F], F]:
     """智能缓存装饰器
 
     自动检测同步/异步函数并使用对应的装饰器。
@@ -198,8 +199,8 @@ def cache_result(
 def invalidate_cache(
     func: Callable,
     *args: Any,
-    key_prefix: Optional[str] = None,
-    cache: Optional[Union[CacheBackend, str]] = None,
+    key_prefix: str | None = None,
+    cache: CacheBackend | str | None = None,
     **kwargs: Any,
 ) -> bool:
     """使缓存失效

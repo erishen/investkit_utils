@@ -4,9 +4,9 @@ import logging
 import sys
 from functools import lru_cache
 
-from investkit_utils.log_utils.config import LoggingConfig, LogFormat
-from investkit_utils.log_utils.logger import InvestKitLogger
+from investkit_utils.log_utils.config import LogFormat, LoggingConfig
 from investkit_utils.log_utils.formatters import JsonFormatter, TextFormatter
+from investkit_utils.log_utils.logger import InvestKitLogger
 
 
 class LoggerManager:
@@ -47,8 +47,8 @@ class LoggerManager:
             root_logger.addHandler(console_handler)
 
         if config.file_output:
-            from logging.handlers import RotatingFileHandler
             import os
+            from logging.handlers import RotatingFileHandler
 
             os.makedirs(os.path.dirname(config.file_path), exist_ok=True)
 

@@ -1,6 +1,7 @@
 """断言工具"""
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 
 def assert_dict_equal(actual: dict, expected: dict, ignore_keys: list | None = None) -> None:

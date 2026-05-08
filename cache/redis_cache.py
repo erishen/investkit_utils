@@ -5,9 +5,8 @@
 
 from __future__ import annotations
 
-import fnmatch
 import json
-from typing import Any, Optional
+from typing import Any
 
 from investkit_utils.cache.base import CacheBackend
 
@@ -38,7 +37,7 @@ class RedisCache(CacheBackend):
         host: str = "localhost",
         port: int = 6379,
         db: int = 0,
-        password: Optional[str] = None,
+        password: str | None = None,
         prefix: str = "investkit:",
         **kwargs: Any,
     ):
@@ -75,20 +74,20 @@ class RedisCache(CacheBackend):
         """序列化值"""
         return json.dumps(value)
 
-    def _deserialize(self, value: Optional[str]) -> Any:
+    def _deserialize(self, value: str | None) -> Any:
         """反序列化值"""
         if value is None:
             return None
         return json.loads(value)
 
-    def get(self, key: str, default: Optional[Any] = None) -> Optional[Any]:
+    def get(self, key: str, default: Any | None = None) -> Any | None:
         full_key = self._make_key(key)
         value = self._client.get(full_key)
         if value is None:
             return default
         return self._deserialize(value)
 
-    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> None:
+    def set(self, key: str, value: Any, ttl: int | None = None) -> None:
         full_key = self._make_key(key)
         serialized = self._serialize(value)
         if ttl:
@@ -115,7 +114,7 @@ class RedisCache(CacheBackend):
             if cursor == 0:
                 break
 
-    def keys(self, pattern: Optional[str] = None) -> list[str]:
+    def keys(self, pattern: str | None = None) -> list[str]:
         if pattern:
             full_pattern = self._make_key(pattern)
         else:

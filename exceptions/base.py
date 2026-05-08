@@ -1,6 +1,6 @@
 """基础异常类"""
 
-from typing import Any, Optional
+from typing import Any
 
 
 class InvestKitError(Exception):
@@ -22,12 +22,12 @@ class InvestKitError(Exception):
 
     def __init__(
         self,
-        message: Optional[str] = None,
-        code: Optional[str] = None,
-        status_code: Optional[int] = None,
-        field: Optional[str] = None,
-        value: Optional[Any] = None,
-        details: Optional[dict] = None,
+        message: str | None = None,
+        code: str | None = None,
+        status_code: int | None = None,
+        field: str | None = None,
+        value: Any | None = None,
+        details: dict | None = None,
     ):
         self.message = message or self.default_message
         self.code = code or self.default_code

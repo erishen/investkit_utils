@@ -3,12 +3,11 @@
 提供聚合 API 文档的 Web 服务。
 """
 
-from typing import Optional
 
 
 def serve_aggregated_docs(
-    services: Optional[list] = None,
-    main_info: Optional[dict] = None,
+    services: list | None = None,
+    main_info: dict | None = None,
     port: int = 8080,
     registry=None,
 ):
@@ -27,8 +26,8 @@ def serve_aggregated_docs(
     from fastapi.responses import HTMLResponse, JSONResponse
 
     from investkit_utils.api_docs.discovery import ServiceInfo, get_service_registry
-    from investkit_utils.api_docs.services import INVESTKIT_SERVICES
     from investkit_utils.api_docs.openapi import aggregate_openapi_docs
+    from investkit_utils.api_docs.services import INVESTKIT_SERVICES
 
     services = services or INVESTKIT_SERVICES
     registry = registry or get_service_registry()

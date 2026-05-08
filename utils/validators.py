@@ -2,7 +2,6 @@
 
 import re
 from decimal import Decimal
-from typing import Union
 
 
 def validate_stock_code(code: str) -> bool:
@@ -27,7 +26,7 @@ def validate_stock_code(code: str) -> bool:
     return any(re.match(p, code) for p in patterns)
 
 
-def validate_amount(value: Union[str, int, float, Decimal]) -> bool:
+def validate_amount(value: str | int | float | Decimal) -> bool:
     """
     验证金额
 
@@ -44,7 +43,7 @@ def validate_amount(value: Union[str, int, float, Decimal]) -> bool:
         return False
 
 
-def validate_percentage(value: Union[str, int, float]) -> bool:
+def validate_percentage(value: str | int | float) -> bool:
     """
     验证百分比
 

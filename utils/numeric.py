@@ -1,13 +1,12 @@
 """数值计算工具"""
 
-from decimal import Decimal, ROUND_HALF_UP
-from typing import Union
+from decimal import ROUND_HALF_UP, Decimal
 
 
 def safe_divide(
-    numerator: Union[int, float, Decimal],
-    denominator: Union[int, float, Decimal],
-    default: Union[int, float, Decimal] = 0,
+    numerator: int | float | Decimal,
+    denominator: int | float | Decimal,
+    default: int | float | Decimal = 0,
 ) -> float:
     """
     安全除法，避免除零错误
@@ -28,7 +27,7 @@ def safe_divide(
         return float(default)
 
 
-def round_to(value: Union[int, float, Decimal], precision: int = 2) -> float:
+def round_to(value: int | float | Decimal, precision: int = 2) -> float:
     """
     精确四舍五入
 
@@ -44,8 +43,8 @@ def round_to(value: Union[int, float, Decimal], precision: int = 2) -> float:
 
 
 def percentage_change(
-    old_value: Union[int, float],
-    new_value: Union[int, float],
+    old_value: int | float,
+    new_value: int | float,
 ) -> float:
     """
     计算百分比变化

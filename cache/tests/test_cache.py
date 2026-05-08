@@ -3,16 +3,13 @@
 import asyncio
 import time
 
-import pytest
-
 from investkit_utils.cache import (
-    CacheBackend,
     MemoryCache,
-    get_cache,
-    get_memory_cache,
-    clear_all_caches,
     cached,
     cached_async,
+    clear_all_caches,
+    get_cache,
+    get_memory_cache,
     invalidate_cache,
 )
 

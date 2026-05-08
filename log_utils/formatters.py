@@ -1,9 +1,9 @@
 """日志格式化器"""
 
-from logging import Formatter, LogRecord
 import json
 from datetime import datetime, timezone
-from typing import Any, Optional
+from logging import Formatter, LogRecord
+from typing import Any
 
 from investkit_utils.log_utils.context import get_correlation_id
 

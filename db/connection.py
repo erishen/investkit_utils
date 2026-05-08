@@ -1,7 +1,7 @@
 import sqlite3
+from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Generator
 
 from .paths import get_asset_lens_db_path
 
