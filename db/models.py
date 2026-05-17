@@ -107,6 +107,34 @@ class PredictionRecord(Base):
     )
 
 
+class NorthIndustryFlow(Base):
+    __tablename__ = "north_industry_flow"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    date = Column(String(10), nullable=False)
+    industry = Column(String(50), nullable=False)
+    net_inflow = Column(Float, default=0)
+    change_rate = Column(Float, default=0)
+    data_source = Column(String(50), default="")
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+
+    __table_args__ = (
+        Index("idx_north_industry_date", "date"),
+        Index("idx_north_industry_name", "industry"),
+        Index("idx_north_industry_date_name", "date", "industry", unique=True),
+    )
+
+    def to_dict(self) -> dict:
+        return {
+            "date": self.date,
+            "industry": self.industry,
+            "net_inflow": self.net_inflow,
+            "change_rate": self.change_rate,
+            "data_source": self.data_source,
+        }
+
+
 class DataSyncLog(Base):
     __tablename__ = "data_sync_logs"
 
@@ -139,5 +167,5 @@ def init_database(db_url: str = "sqlite:///./data/asset_lens.db"):
         engine_kwargs["pool_timeout"] = 30
     engine = create_engine(db_url, **engine_kwargs)
     Base.metadata.create_all(engine)
-    Session = sessionmaker(bind=engine)  # noqa: N806
+    Session = sessionmaker(bind=engine)
     return engine, Session

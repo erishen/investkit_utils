@@ -83,7 +83,7 @@ def merge_openapi_specs(
                         if isinstance(method, dict):
                             tags = method.get("tags", [])
                             if service_name not in tags:
-                                method["tags"] = [service_name] + tags
+                                method["tags"] = [service_name, *tags]
                 merged["paths"][new_path] = methods
 
         if "components" in spec:

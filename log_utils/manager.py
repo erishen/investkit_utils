@@ -100,7 +100,7 @@ def setup_logging(
     level: str = "INFO",
     log_format: str = "json",
     console: bool = True,
-    file_path: str = None,
+    file_path: str | None = None,
     include_module: bool = True,
     include_correlation_id: bool = True,
 ) -> None:

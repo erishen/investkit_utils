@@ -14,3 +14,7 @@ venv/
 .ruff_cache/
 .coverage
 htmlcov/
+
+# 数据文件
+data/
+backup/

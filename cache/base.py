@@ -107,10 +107,7 @@ class CacheBackend(ABC):
         if value is not self._MISSING:
             return value
 
-        if callable(default):
-            value = default()
-        else:
-            value = default
+        value = default() if callable(default) else default
 
         self.set(key, value, ttl)
         return value

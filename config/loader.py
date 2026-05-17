@@ -204,8 +204,7 @@ def reload_config(project_name: str | None = None) -> Config:
     global _config_cache
 
     cache_key = project_name or "default"
-    if cache_key in _config_cache:
-        del _config_cache[cache_key]
+    _config_cache.pop(cache_key, None)
 
     return get_config(project_name)
 

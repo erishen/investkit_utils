@@ -115,10 +115,7 @@ class RedisCache(CacheBackend):
                 break
 
     def keys(self, pattern: str | None = None) -> list[str]:
-        if pattern:
-            full_pattern = self._make_key(pattern)
-        else:
-            full_pattern = f"{self._prefix}*"
+        full_pattern = self._make_key(pattern) if pattern else f"{self._prefix}*"
 
         result = []
         cursor = 0

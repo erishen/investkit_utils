@@ -16,7 +16,7 @@ from investkit_utils.cache.base import CacheBackend
 class CacheEntry:
     """缓存条目"""
 
-    __slots__ = ["value", "expires_at"]
+    __slots__ = ["expires_at", "value"]
 
     def __init__(self, value: Any, ttl: int | None = None):
         self.value = value
@@ -97,7 +97,7 @@ class MemoryCache(CacheBackend):
             if pattern is None:
                 return list(self._cache.keys())
             return [
-                key for key in self._cache.keys()
+                key for key in self._cache
                 if fnmatch.fnmatch(key, pattern)
             ]
 
