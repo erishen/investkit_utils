@@ -8,7 +8,7 @@ version = "1.0.0"
 description = "InvestKit 工具库 - 统一的配置、日志、工具、异常、类型定义和测试工具"
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.10"
+requires-python = ">=3.11,<3.14"
 authors = [
     {name = "InvestKit Team"}
 ]
@@ -48,7 +48,7 @@ namespaces = false
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "W", "F", "I", "N", "UP", "B", "SIM", "PERF", "RUF"]
@@ -62,7 +62,7 @@ quote-style = "double"
 indent-style = "space"
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 ignore_missing_imports = true
