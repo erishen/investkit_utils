@@ -18,7 +18,9 @@ def assert_dict_equal(actual: dict, expected: dict, ignore_keys: list | None = N
     actual_filtered = {k: v for k, v in actual.items() if k not in ignore_keys}
     expected_filtered = {k: v for k, v in expected.items() if k not in ignore_keys}
 
-    assert actual_filtered == expected_filtered, f"Dicts not equal:\nActual: {actual_filtered}\nExpected: {expected_filtered}"
+    assert actual_filtered == expected_filtered, (
+        f"Dicts not equal:\nActual: {actual_filtered}\nExpected: {expected_filtered}"
+    )
 
 
 def assert_almost_equal(actual: float, expected: float, tolerance: float = 1e-6) -> None:

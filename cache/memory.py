@@ -96,10 +96,7 @@ class MemoryCache(CacheBackend):
             self._cleanup_expired()
             if pattern is None:
                 return list(self._cache.keys())
-            return [
-                key for key in self._cache
-                if fnmatch.fnmatch(key, pattern)
-            ]
+            return [key for key in self._cache if fnmatch.fnmatch(key, pattern)]
 
     def _cleanup_expired(self) -> int:
         """清理过期缓存
@@ -110,7 +107,8 @@ class MemoryCache(CacheBackend):
         count = 0
         current_time = time.time()
         expired_keys = [
-            key for key, entry in self._cache.items()
+            key
+            for key, entry in self._cache.items()
             if entry.expires_at and current_time > entry.expires_at
         ]
         for key in expired_keys:

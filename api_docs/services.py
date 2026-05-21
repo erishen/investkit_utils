@@ -6,6 +6,7 @@ from dataclasses import dataclass
 @dataclass
 class APIService:
     """API 服务定义"""
+
     name: str
     url: str
     description: str = ""

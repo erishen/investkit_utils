@@ -18,8 +18,8 @@ def validate_stock_code(code: str) -> bool:
         return False
 
     patterns = [
-        r"^\d{6}$",             # A股: 000001
-        r"^\d{6}\.[A-Z]{2}$",   # A股带后缀: 000001.SZ
+        r"^\d{6}$",  # A股: 000001
+        r"^\d{6}\.[A-Z]{2}$",  # A股带后缀: 000001.SZ
         r"^[A-Z]{1,5}(\.[A-Z])?$",  # 美股: AAPL, BRK.B
     ]
 

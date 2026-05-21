@@ -89,9 +89,7 @@ def merge_openapi_specs(
         if "components" in spec:
             if "schemas" in spec["components"]:
                 for schema_name, schema in spec["components"]["schemas"].items():
-                    prefixed_name = (
-                        f"{service_name}_{schema_name}" if service_name else schema_name
-                    )
+                    prefixed_name = f"{service_name}_{schema_name}" if service_name else schema_name
                     merged["components"]["schemas"][prefixed_name] = schema
             if "securitySchemes" in spec["components"]:
                 merged["components"]["securitySchemes"].update(
@@ -109,16 +107,12 @@ def merge_openapi_specs(
         spec.get("_service") for spec in specs if spec and spec.get("_service")
     ):
         if service_name not in existing_tags:
-            merged["tags"].append(
-                {"name": service_name, "description": f"{service_name} API"}
-            )
+            merged["tags"].append({"name": service_name, "description": f"{service_name} API"})
 
     return merged
 
 
-async def fetch_openapi_spec(
-    service: APIService, use_cache: bool = True
-) -> dict | None:
+async def fetch_openapi_spec(service: APIService, use_cache: bool = True) -> dict | None:
     """获取服务的 OpenAPI 规范
 
     Args:

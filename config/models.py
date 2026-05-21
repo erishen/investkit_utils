@@ -236,9 +236,7 @@ class MonitoringTracingConfig(BaseModel):
 
 class MonitoringConfig(BaseModel):
     metrics: MonitoringMetricsConfig = Field(default_factory=MonitoringMetricsConfig)
-    health_check: MonitoringHealthCheckConfig = Field(
-        default_factory=MonitoringHealthCheckConfig
-    )
+    health_check: MonitoringHealthCheckConfig = Field(default_factory=MonitoringHealthCheckConfig)
     tracing: MonitoringTracingConfig = Field(default_factory=MonitoringTracingConfig)
 
 
@@ -290,4 +288,5 @@ class Config(BaseModel):
     @staticmethod
     def _deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
         from investkit_utils.utils.data_utils import deep_merge
+
         return deep_merge(base, override)

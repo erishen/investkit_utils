@@ -7,13 +7,7 @@ class InvestKitLogger(Logger):
     """InvestKit 自定义 Logger"""
 
     def _log_with_extra(
-        self,
-        level: int,
-        msg: str,
-        args: tuple,
-        exc_info=None,
-        extra: dict | None = None,
-        **kwargs
+        self, level: int, msg: str, args: tuple, exc_info=None, extra: dict | None = None, **kwargs
     ) -> None:
         if extra:
             if "extra_data" not in kwargs:

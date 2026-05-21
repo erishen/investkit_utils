@@ -109,9 +109,7 @@ class ServiceRegistry:
         """按标签获取服务"""
         return [s for s in self._services.values() if tag in s.tags]
 
-    async def health_check(
-        self, name: str, timeout: float = 5.0
-    ) -> HealthCheckResult:
+    async def health_check(self, name: str, timeout: float = 5.0) -> HealthCheckResult:
         """检查单个服务健康状态"""
         service = self.get(name)
         if not service:
@@ -128,17 +126,17 @@ class ServiceRegistry:
 
             start_time = time.time()
             async with httpx.AsyncClient(timeout=timeout) as client:
-                response = await client.get(
-                    f"{service.url}{service.health_url}"
-                )
+                response = await client.get(f"{service.url}{service.health_url}")
                 response_time = (time.time() - start_time) * 1000
 
                 if response.status_code == 200:
                     status = ServiceStatus.HEALTHY
                     error = None
-                    details = response.json() if response.headers.get(
-                        "content-type", ""
-                    ).startswith("application/json") else {}
+                    details = (
+                        response.json()
+                        if response.headers.get("content-type", "").startswith("application/json")
+                        else {}
+                    )
                 else:
                     status = ServiceStatus.UNHEALTHY
                     error = f"HTTP {response.status_code}"
@@ -161,9 +159,7 @@ class ServiceRegistry:
         self._health_status[name] = result
         return result
 
-    async def health_check_all(
-        self, timeout: float = 5.0
-    ) -> dict[str, HealthCheckResult]:
+    async def health_check_all(self, timeout: float = 5.0) -> dict[str, HealthCheckResult]:
         """检查所有服务健康状态（并发执行）"""
 
         names = list(self._services.keys())

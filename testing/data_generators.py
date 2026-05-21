@@ -35,15 +35,17 @@ def generate_test_stock_data(
         low_price = min(open_price, close_price) * (1 - random.uniform(0, volatility / 2))
         volume = random.randint(100000, 1000000)
 
-        data.append({
-            "symbol": symbol,
-            "date": current_date.isoformat(),
-            "open": round(open_price, 2),
-            "high": round(high_price, 2),
-            "low": round(low_price, 2),
-            "close": round(close_price, 2),
-            "volume": volume,
-        })
+        data.append(
+            {
+                "symbol": symbol,
+                "date": current_date.isoformat(),
+                "open": round(open_price, 2),
+                "high": round(high_price, 2),
+                "low": round(low_price, 2),
+                "close": round(close_price, 2),
+                "volume": volume,
+            }
+        )
 
         price = close_price
 
@@ -70,11 +72,13 @@ def generate_test_portfolio(
     for symbol in symbols:
         quantity = random.randint(100, 1000)
         cost_price = random.uniform(10, 100)
-        positions.append({
-            "symbol": symbol,
-            "quantity": quantity,
-            "cost_price": round(cost_price, 2),
-        })
+        positions.append(
+            {
+                "symbol": symbol,
+                "quantity": quantity,
+                "cost_price": round(cost_price, 2),
+            }
+        )
 
     return {
         "name": "Test Portfolio",

@@ -34,6 +34,7 @@ def retry(
         def fetch_data():
             return requests.get("https://api.example.com/data")
     """
+
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> T:
@@ -54,6 +55,7 @@ def retry(
             raise last_exception
 
         return wrapper
+
     return decorator
 
 
@@ -75,6 +77,7 @@ def retry_async(
     Returns:
         装饰器
     """
+
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
         @functools.wraps(func)
         async def wrapper(*args, **kwargs) -> T:
@@ -93,4 +96,5 @@ def retry_async(
             raise last_exception
 
         return wrapper
+
     return decorator

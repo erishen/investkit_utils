@@ -4,7 +4,6 @@
 """
 
 
-
 def serve_aggregated_docs(
     services: list | None = None,
     main_info: dict | None = None,
@@ -151,25 +150,23 @@ def serve_aggregated_docs(
     @app.get("/health")
     async def health_check():
         results = await registry.health_check_all()
-        return JSONResponse(
-            content={
-                name: result.to_dict() for name, result in results.items()
-            }
-        )
+        return JSONResponse(content={name: result.to_dict() for name, result in results.items()})
 
     @app.get("/services")
     async def list_services():
         services_list = []
         for svc in registry.get_all():
             health = registry.get_health_status(svc.name)
-            services_list.append({
-                "name": svc.name,
-                "url": svc.url,
-                "description": svc.description,
-                "prefix": svc.prefix,
-                "enabled": svc.enabled,
-                "status": health.status.value if health else "unknown",
-            })
+            services_list.append(
+                {
+                    "name": svc.name,
+                    "url": svc.url,
+                    "description": svc.description,
+                    "prefix": svc.prefix,
+                    "enabled": svc.enabled,
+                    "status": health.status.value if health else "unknown",
+                }
+            )
         return JSONResponse(content={"services": services_list})
 
     @app.get("/docs/{service_name}", response_class=HTMLResponse)

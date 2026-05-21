@@ -38,10 +38,16 @@ class StockKline(Base):
 
     def to_dict(self) -> dict:
         return {
-            "date": self.date, "open": self.open, "close": self.close,
-            "high": self.high, "low": self.low, "volume": self.volume,
-            "amount": self.amount, "amplitude": self.amplitude,
-            "change_percent": self.change_percent, "change_amount": self.change_amount,
+            "date": self.date,
+            "open": self.open,
+            "close": self.close,
+            "high": self.high,
+            "low": self.low,
+            "volume": self.volume,
+            "amount": self.amount,
+            "amplitude": self.amplitude,
+            "change_percent": self.change_percent,
+            "change_amount": self.change_amount,
             "turnover_rate": self.turnover_rate,
         }
 
@@ -157,6 +163,7 @@ def init_database(db_url: str = "sqlite:///./data/asset_lens.db"):
     engine_kwargs: dict[str, Any] = {"echo": False}
     if db_url.startswith("sqlite"):
         from sqlalchemy.pool import StaticPool
+
         engine_kwargs["connect_args"] = {"check_same_thread": False}
         engine_kwargs["poolclass"] = StaticPool
     else:

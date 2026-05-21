@@ -1,6 +1,5 @@
 """InvestKit 类型模块测试"""
 
-
 from investkit_utils.types import (
     AssetType,
     Market,
@@ -72,7 +71,9 @@ class TestStockInfo:
 
 class TestOrder:
     def test_creation(self):
-        order = Order(symbol="600519", side="BUY", order_type=OrderType.LIMIT, quantity=100, price=1800.0)
+        order = Order(
+            symbol="600519", side="BUY", order_type=OrderType.LIMIT, quantity=100, price=1800.0
+        )
         assert order.symbol == "600519"
         assert order.quantity == 100
 

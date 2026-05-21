@@ -1,6 +1,7 @@
 """InvestKit 测试工具模块测试"""
 
 import pytest
+
 from investkit_utils.testing.assertions import (
     assert_almost_equal,
     assert_dict_equal,

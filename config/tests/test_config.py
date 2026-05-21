@@ -102,9 +102,7 @@ class TestConfigFunctions:
         assert config1 is not config2
 
     def test_set_config_path(self):
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".yaml", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             f.write("app:\n  name: test-app\n")
             f.flush()
             set_config_path(f.name)

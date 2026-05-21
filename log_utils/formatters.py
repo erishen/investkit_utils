@@ -1,7 +1,7 @@
 """日志格式化器"""
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from logging import Formatter, LogRecord
 from typing import Any
 
@@ -18,7 +18,7 @@ class JsonFormatter(Formatter):
 
     def format(self, record: LogRecord) -> str:
         log_data: dict[str, Any] = {
-            "timestamp": datetime.now(timezone.utc).isoformat() + "Z",
+            "timestamp": datetime.now(UTC).isoformat() + "Z",
             "level": record.levelname,
             "message": record.getMessage(),
             "logger": record.name,
@@ -53,7 +53,7 @@ class TextFormatter(Formatter):
 
     def format(self, record: LogRecord) -> str:
         parts = [
-            datetime.now(timezone.utc).isoformat() + "Z",
+            datetime.now(UTC).isoformat() + "Z",
             f"[{record.levelname:8}]",
         ]
 

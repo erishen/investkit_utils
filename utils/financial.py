@@ -36,9 +36,7 @@ def calculate_irr(
 
     for _ in range(max_iterations):
         npv = sum(cf / (1 + rate) ** i for i, cf in enumerate(flows))
-        npv_derivative = sum(
-            -i * cf / (1 + rate) ** (i + 1) for i, cf in enumerate(flows)
-        )
+        npv_derivative = sum(-i * cf / (1 + rate) ** (i + 1) for i, cf in enumerate(flows))
 
         if abs(npv_derivative) < 1e-10:
             break
@@ -253,7 +251,5 @@ def calculate_compound_interest(
         >>> calculate_compound_interest(10000, 0.05, 5)
         12833.59
     """
-    amount = principal * (1 + rate / compounds_per_year) ** (
-        compounds_per_year * years
-    )
+    amount = principal * (1 + rate / compounds_per_year) ** (compounds_per_year * years)
     return round(amount, 2)

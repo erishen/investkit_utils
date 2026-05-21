@@ -152,6 +152,7 @@ class TestFileUtils:
 
     def teardown_method(self):
         import shutil
+
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
     def test_ensure_dir(self):
@@ -217,6 +218,7 @@ class TestFileUtils:
 
     def test_get_latest_file(self):
         import time
+
         file1 = os.path.join(self.temp_dir, "a.txt")
         file2 = os.path.join(self.temp_dir, "b.txt")
         write_text(file1, "a")

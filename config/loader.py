@@ -118,9 +118,7 @@ class ConfigLoader:
 
         base_config = config_dir / "config.base.yaml"
         project_config = config_dir / f"config.{project_name}.yaml"
-        local_config = (
-            base_path / "config.local.yaml" if base_path else None
-        )
+        local_config = base_path / "config.local.yaml" if base_path else None
 
         paths = [base_config, project_config]
         if local_config and local_config.exists():
@@ -157,6 +155,7 @@ class ConfigLoader:
     def _deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
         """深度合并两个字典"""
         from investkit_utils.utils.data_utils import deep_merge
+
         return deep_merge(base, override)
 
 

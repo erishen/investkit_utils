@@ -34,15 +34,19 @@ class LoggerManager:
             console_handler.setLevel(getattr(logging, config.level.upper()))
 
             if config.format == LogFormat.JSON:
-                console_handler.setFormatter(JsonFormatter(
-                    include_module=config.include_module,
-                    include_correlation_id=config.include_correlation_id
-                ))
+                console_handler.setFormatter(
+                    JsonFormatter(
+                        include_module=config.include_module,
+                        include_correlation_id=config.include_correlation_id,
+                    )
+                )
             else:
-                console_handler.setFormatter(TextFormatter(
-                    include_module=config.include_module,
-                    include_correlation_id=config.include_correlation_id
-                ))
+                console_handler.setFormatter(
+                    TextFormatter(
+                        include_module=config.include_module,
+                        include_correlation_id=config.include_correlation_id,
+                    )
+                )
 
             root_logger.addHandler(console_handler)
 
@@ -56,20 +60,24 @@ class LoggerManager:
                 config.file_path,
                 maxBytes=config.rotation_max_bytes,
                 backupCount=config.rotation_backup_count,
-                encoding="utf-8"
+                encoding="utf-8",
             )
             file_handler.setLevel(getattr(logging, config.level.upper()))
 
             if config.format == LogFormat.JSON:
-                file_handler.setFormatter(JsonFormatter(
-                    include_module=config.include_module,
-                    include_correlation_id=config.include_correlation_id
-                ))
+                file_handler.setFormatter(
+                    JsonFormatter(
+                        include_module=config.include_module,
+                        include_correlation_id=config.include_correlation_id,
+                    )
+                )
             else:
-                file_handler.setFormatter(TextFormatter(
-                    include_module=config.include_module,
-                    include_correlation_id=config.include_correlation_id
-                ))
+                file_handler.setFormatter(
+                    TextFormatter(
+                        include_module=config.include_module,
+                        include_correlation_id=config.include_correlation_id,
+                    )
+                )
 
             root_logger.addHandler(file_handler)
 

@@ -15,6 +15,7 @@ from investkit_utils.types.enums import (
 @dataclass
 class StockInfo:
     """股票信息"""
+
     code: str
     name: str
     market: Market
@@ -40,6 +41,7 @@ class StockInfo:
 @dataclass
 class Price:
     """价格数据"""
+
     open: float
     high: float
     low: float
@@ -63,6 +65,7 @@ class Price:
 @dataclass
 class TradeSignal:
     """交易信号"""
+
     symbol: str
     signal_type: SignalType
     price: float | None = None
@@ -88,6 +91,7 @@ class TradeSignal:
 @dataclass
 class Position:
     """持仓信息"""
+
     symbol: str
     quantity: float
     cost_price: float
@@ -101,7 +105,9 @@ class Position:
             self.market_value = self.quantity * self.current_price
             self.profit_loss = (self.current_price - self.cost_price) * self.quantity
             if self.cost_price > 0:
-                self.profit_loss_pct = (self.current_price - self.cost_price) / self.cost_price * 100
+                self.profit_loss_pct = (
+                    (self.current_price - self.cost_price) / self.cost_price * 100
+                )
 
     def to_dict(self) -> dict:
         return {
@@ -118,6 +124,7 @@ class Position:
 @dataclass
 class Portfolio:
     """投资组合"""
+
     name: str
     positions: list[Position] = field(default_factory=list)
     cash: float = 0.0
@@ -134,7 +141,9 @@ class Portfolio:
 
         if self.total_cost and self.total_cost > 0:
             self.total_profit_loss = self.total_value - self.total_cost
-            self.total_profit_loss_pct = (self.total_value - self.total_cost) / self.total_cost * 100
+            self.total_profit_loss_pct = (
+                (self.total_value - self.total_cost) / self.total_cost * 100
+            )
 
     def to_dict(self) -> dict:
         return {
@@ -151,6 +160,7 @@ class Portfolio:
 @dataclass
 class Order:
     """订单"""
+
     symbol: str
     side: Literal["BUY", "SELL"]
     order_type: OrderType
@@ -182,6 +192,7 @@ class Order:
 @dataclass
 class RiskMetrics:
     """风险指标"""
+
     symbol: str | None = None
     var_95: float | None = None
     var_99: float | None = None
@@ -209,6 +220,7 @@ class RiskMetrics:
 @dataclass
 class MLPrediction:
     """ML 预测结果"""
+
     symbol: str
     prediction: float
     confidence: float

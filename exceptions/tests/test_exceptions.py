@@ -1,6 +1,5 @@
 """InvestKit 异常模块测试"""
 
-
 from investkit_utils.exceptions import (
     AuthenticationError,
     AuthorizationError,

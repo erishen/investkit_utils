@@ -20,6 +20,7 @@ class LogLevel(Enum):
 @dataclass
 class LoggingConfig:
     """日志配置"""
+
     level: str = "INFO"
     format: LogFormat = LogFormat.JSON
     console_output: bool = True

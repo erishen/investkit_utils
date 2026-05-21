@@ -12,6 +12,7 @@ from investkit_utils.cache.base import CacheBackend
 
 try:
     import redis
+
     REDIS_AVAILABLE = True
 except ImportError:
     REDIS_AVAILABLE = False
@@ -52,9 +53,7 @@ class RedisCache(CacheBackend):
             **kwargs: 其他 Redis 参数
         """
         if not REDIS_AVAILABLE:
-            raise ImportError(
-                "Redis is not installed. Install it with: pip install redis"
-            )
+            raise ImportError("Redis is not installed. Install it with: pip install redis")
 
         self._client = redis.Redis(
             host=host,

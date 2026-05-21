@@ -90,9 +90,7 @@ class CacheBackend(ABC):
 
     _MISSING = object()
 
-    def get_or_set(
-        self, key: str, default: Any, ttl: int | None = None
-    ) -> Any:
+    def get_or_set(self, key: str, default: Any, ttl: int | None = None) -> Any:
         """获取缓存值，不存在则设置默认值
 
         Args:

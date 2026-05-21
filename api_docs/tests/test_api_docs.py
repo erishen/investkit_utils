@@ -1,11 +1,15 @@
 """API 文档模块测试"""
 
+import json
+import tempfile
 
 from investkit_utils.api_docs import (
     INVESTKIT_SERVICES,
     APIService,
+    HealthCheckResult,
     ServiceInfo,
     ServiceRegistry,
+    ServiceStatus,
     load_openapi_spec_from_file,
     merge_openapi_specs,
 )
@@ -72,9 +76,7 @@ class TestMergeOpenAPISpecs:
         assert "test-service" in result["tags"][0]["name"]
 
     def test_merge_custom_info(self):
-        result = merge_openapi_specs(
-            [], main_info={"title": "Custom API", "version": "2.0.0"}
-        )
+        result = merge_openapi_specs([], main_info={"title": "Custom API", "version": "2.0.0"})
         assert result["info"]["title"] == "Custom API"
         assert result["info"]["version"] == "2.0.0"
 
@@ -131,9 +133,7 @@ class TestServiceRegistry:
         assert services[0].name == "enabled"
 
     def test_get_by_tag(self):
-        self.registry.register(
-            ServiceInfo(name="api1", url="http://localhost:8001", tags=["core"])
-        )
+        self.registry.register(ServiceInfo(name="api1", url="http://localhost:8001", tags=["core"]))
         self.registry.register(
             ServiceInfo(name="api2", url="http://localhost:8002", tags=["extra"])
         )
@@ -142,9 +142,7 @@ class TestServiceRegistry:
         assert services[0].name == "api1"
 
     def test_update_service(self):
-        self.registry.register(
-            ServiceInfo(name="test", url="http://localhost:8000")
-        )
+        self.registry.register(ServiceInfo(name="test", url="http://localhost:8000"))
         self.registry.update_service("test", description="Updated")
         service = self.registry.get("test")
         assert service.description == "Updated"
@@ -179,3 +177,129 @@ class TestServiceInfo:
         assert service.enabled is True
         assert service.tags == []
         assert service.metadata == {}
+
+
+class TestHealthCheckResult:
+    def test_health_check_result_creation(self):
+        result = HealthCheckResult(
+            service_name="test",
+            status=ServiceStatus.HEALTHY,
+            response_time_ms=50.0,
+        )
+        assert result.service_name == "test"
+        assert result.status == ServiceStatus.HEALTHY
+        assert result.response_time_ms == 50.0
+
+    def test_health_check_result_to_dict(self):
+        result = HealthCheckResult(
+            service_name="test",
+            status=ServiceStatus.UNHEALTHY,
+            error="Connection refused",
+        )
+        d = result.to_dict()
+        assert d["service_name"] == "test"
+        assert d["status"] == "unhealthy"
+        assert d["error"] == "Connection refused"
+
+    def test_health_check_result_with_details(self):
+        result = HealthCheckResult(
+            service_name="test",
+            status=ServiceStatus.DEGRADED,
+            details={"latency": "high"},
+        )
+        d = result.to_dict()
+        assert d["details"]["latency"] == "high"
+
+
+class TestServiceStatus:
+    def test_service_status_values(self):
+        assert ServiceStatus.UNKNOWN.value == "unknown"
+        assert ServiceStatus.HEALTHY.value == "healthy"
+        assert ServiceStatus.UNHEALTHY.value == "unhealthy"
+        assert ServiceStatus.DEGRADED.value == "degraded"
+
+
+class TestLoadOpenAPISpecFromFileValid:
+    def test_load_valid_file(self):
+        spec_data = {
+            "openapi": "3.0.3",
+            "info": {"title": "Test", "version": "1.0.0"},
+            "paths": {},
+        }
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            json.dump(spec_data, f)
+            f.flush()
+            result = load_openapi_spec_from_file(f.name)
+        assert result is not None
+        assert result["openapi"] == "3.0.3"
+
+    def test_load_invalid_json(self):
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            f.write("not valid json{{{")
+            f.flush()
+            result = load_openapi_spec_from_file(f.name)
+        assert result is None
+
+
+class TestMergeOpenAPISpecsAdvanced:
+    def test_merge_multiple_specs(self):
+        spec1 = {
+            "paths": {"/a": {"get": {"summary": "A"}}},
+            "components": {"schemas": {"ModelA": {"type": "object"}}},
+        }
+        spec2 = {
+            "paths": {"/b": {"get": {"summary": "B"}}},
+            "components": {"schemas": {"ModelB": {"type": "object"}}},
+        }
+        result = merge_openapi_specs([spec1, spec2])
+        assert "/a" in result["paths"]
+        assert "/b" in result["paths"]
+        assert "ModelA" in result["components"]["schemas"]
+        assert "ModelB" in result["components"]["schemas"]
+
+    def test_merge_with_security_schemes(self):
+        spec = {
+            "components": {
+                "schemas": {},
+                "securitySchemes": {"bearerAuth": {"type": "http", "scheme": "bearer"}},
+            },
+        }
+        result = merge_openapi_specs([spec])
+        assert "bearerAuth" in result["components"]["securitySchemes"]
+
+    def test_merge_none_spec_skipped(self):
+        result = merge_openapi_specs([None, {"paths": {"/test": {"get": {"summary": "T"}}}}])
+        assert "/test" in result["paths"]
+
+    def test_merge_service_name_prefixed_schema(self):
+        spec = {
+            "_service": "svc",
+            "components": {"schemas": {"Model": {"type": "object"}}},
+        }
+        result = merge_openapi_specs([spec])
+        assert "svc_Model" in result["components"]["schemas"]
+
+
+class TestServiceRegistryAdvanced:
+    def test_unregister_nonexistent(self):
+        registry = ServiceRegistry()
+        assert registry.unregister("nonexistent") is False
+
+    def test_update_nonexistent_service(self):
+        registry = ServiceRegistry()
+        assert registry.update_service("nonexistent", description="x") is False
+
+    def test_get_all_disabled(self):
+        registry = ServiceRegistry()
+        registry.register(ServiceInfo(name="disabled", url="http://localhost:8000", enabled=False))
+        services = registry.get_all(enabled_only=False)
+        assert len(services) == 1
+
+    def test_get_health_status_empty(self):
+        registry = ServiceRegistry()
+        assert registry.get_health_status("test") is None
+
+    def test_get_all_health_status(self):
+        registry = ServiceRegistry()
+        result = registry.get_all_health_status()
+        assert isinstance(result, dict)

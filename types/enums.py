@@ -5,6 +5,7 @@ from enum import Enum
 
 class SignalType(str, Enum):
     """信号类型"""
+
     BUY = "BUY"
     SELL = "SELL"
     HOLD = "HOLD"
@@ -12,6 +13,7 @@ class SignalType(str, Enum):
 
 class OrderType(str, Enum):
     """订单类型"""
+
     MARKET = "MARKET"
     LIMIT = "LIMIT"
     STOP = "STOP"
@@ -20,6 +22,7 @@ class OrderType(str, Enum):
 
 class OrderStatus(str, Enum):
     """订单状态"""
+
     PENDING = "PENDING"
     SUBMITTED = "SUBMITTED"
     FILLED = "FILLED"
@@ -29,6 +32,7 @@ class OrderStatus(str, Enum):
 
 class Market(str, Enum):
     """市场类型"""
+
     SH = "SH"  # 上海
     SZ = "SZ"  # 深圳
     BJ = "BJ"  # 北京
@@ -38,6 +42,7 @@ class Market(str, Enum):
 
 class AssetType(str, Enum):
     """资产类型"""
+
     STOCK = "STOCK"
     FUND = "FUND"
     BOND = "BOND"
@@ -48,6 +53,7 @@ class AssetType(str, Enum):
 
 class RiskLevel(str, Enum):
     """风险等级"""
+
     LOW = "LOW"
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
