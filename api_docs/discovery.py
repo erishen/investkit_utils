@@ -8,6 +8,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
+from investkit_utils.utils.data_utils import ToDictMixin
+
 
 class ServiceStatus(str, Enum):
     """服务状态"""
@@ -19,25 +21,13 @@ class ServiceStatus(str, Enum):
 
 
 @dataclass
-class HealthCheckResult:
-    """健康检查结果"""
-
+class HealthCheckResult(ToDictMixin):
     service_name: str
     status: ServiceStatus
     response_time_ms: float | None = None
     last_check: datetime = field(default_factory=datetime.now)
     error: str | None = None
     details: dict[str, Any] = field(default_factory=dict)
-
-    def to_dict(self) -> dict[str, Any]:
-        return {
-            "service_name": self.service_name,
-            "status": self.status.value,
-            "response_time_ms": self.response_time_ms,
-            "last_check": self.last_check.isoformat(),
-            "error": self.error,
-            "details": self.details,
-        }
 
 
 @dataclass
@@ -149,7 +139,7 @@ class ServiceRegistry:
                     error=error,
                     details=details,
                 )
-        except Exception as e:
+        except (httpx.HTTPError, httpx.InvalidURL) as e:
             result = HealthCheckResult(
                 service_name=name,
                 status=ServiceStatus.UNHEALTHY,

@@ -8,10 +8,10 @@ from pathlib import Path
 
 class TestLogConfig:
     def test_log_format_enum(self):
-        from investkit_utils.log_utils.config import LogFormat
+        from investkit_utils.config.models import LoggingFormat
 
-        assert LogFormat.JSON.value == "json"
-        assert LogFormat.TEXT.value == "text"
+        assert LoggingFormat.JSON.value == "json"
+        assert LoggingFormat.TEXT.value == "text"
 
     def test_log_level_enum(self):
         from investkit_utils.log_utils.config import LogLevel
@@ -23,31 +23,37 @@ class TestLogConfig:
         assert LogLevel.CRITICAL.value == "CRITICAL"
 
     def test_logging_config_defaults(self):
-        from investkit_utils.log_utils.config import LogFormat, LoggingConfig
+        from investkit_utils.config.models import LoggingConfig, LoggingFormat
 
         config = LoggingConfig()
         assert config.level == "INFO"
-        assert config.format == LogFormat.JSON
-        assert config.console_output is True
-        assert config.file_output is False
-        assert config.include_timestamp is True
-        assert config.include_module is True
-        assert config.include_correlation_id is True
+        assert config.format == LoggingFormat.JSON
+        assert config.output.console is True
+        assert config.output.file is False
+        assert config.fields.include_timestamp is True
+        assert config.fields.include_module is True
+        assert config.fields.include_correlation_id is True
 
     def test_logging_config_custom(self):
-        from investkit_utils.log_utils.config import LogFormat, LoggingConfig
+        from investkit_utils.config.models import (
+            LoggingConfig,
+            LoggingFormat,
+            LoggingOutputConfig,
+        )
 
         config = LoggingConfig(
             level="DEBUG",
-            format=LogFormat.TEXT,
-            console_output=False,
-            file_output=True,
-            file_path="/tmp/test.log",
+            format=LoggingFormat.TEXT,
+            output=LoggingOutputConfig(
+                console=False,
+                file=True,
+                path="/tmp/test.log",
+            ),
         )
         assert config.level == "DEBUG"
-        assert config.format == LogFormat.TEXT
-        assert config.console_output is False
-        assert config.file_output is True
+        assert config.format == LoggingFormat.TEXT
+        assert config.output.console is False
+        assert config.output.file is True
 
 
 class TestContext:
@@ -237,7 +243,7 @@ class TestInvestKitLogger:
 
 class TestLoggerManager:
     def test_configure_default(self):
-        from investkit_utils.log_utils.config import LoggingConfig
+        from investkit_utils.config.models import LoggingConfig
         from investkit_utils.log_utils.manager import LoggerManager
 
         LoggerManager.configure(LoggingConfig())
@@ -245,16 +251,16 @@ class TestLoggerManager:
         assert LoggerManager._config.level == "INFO"
 
     def test_configure_custom(self):
-        from investkit_utils.log_utils.config import LogFormat, LoggingConfig
+        from investkit_utils.config.models import LoggingConfig, LoggingFormat
         from investkit_utils.log_utils.manager import LoggerManager
 
-        config = LoggingConfig(level="DEBUG", format=LogFormat.TEXT)
+        config = LoggingConfig(level="DEBUG", format=LoggingFormat.TEXT)
         LoggerManager.configure(config)
         assert LoggerManager._config.level == "DEBUG"
-        assert LoggerManager._config.format == LogFormat.TEXT
+        assert LoggerManager._config.format == LoggingFormat.TEXT
 
     def test_get_config(self):
-        from investkit_utils.log_utils.config import LoggingConfig
+        from investkit_utils.config.models import LoggingConfig
         from investkit_utils.log_utils.manager import LoggerManager
 
         LoggerManager.configure(LoggingConfig(level="WARNING"))
@@ -280,5 +286,5 @@ class TestLoggerManager:
         with tempfile.TemporaryDirectory() as tmpdir:
             log_file = str(Path(tmpdir) / "test.log")
             setup_logging(level="INFO", log_format="json", file_path=log_file)
-            assert LoggerManager._config.file_output is True
-            assert LoggerManager._config.file_path == log_file
+            assert LoggerManager._config.output.file is True
+            assert LoggerManager._config.output.path == log_file

@@ -20,6 +20,7 @@ from investkit_utils.config.models import (
     LoggingConfig,
     LoggingFormat,
 )
+from investkit_utils.utils.data_utils import deep_merge
 
 
 class TestConfigModels:
@@ -76,7 +77,7 @@ class TestConfigLoader:
     def test_deep_merge(self):
         base = {"a": 1, "b": {"c": 2, "d": 3}}
         override = {"b": {"c": 10}}
-        result = ConfigLoader._deep_merge(base, override)
+        result = deep_merge(base, override)
         assert result["a"] == 1
         assert result["b"]["c"] == 10
         assert result["b"]["d"] == 3

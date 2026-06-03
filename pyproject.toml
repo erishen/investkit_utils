@@ -27,7 +27,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=7.4.0",
-    "ruff>=0.1.0",
+    "ruff>=0.4.0",
     "mypy>=1.0.0",
 ]
 api = [
@@ -45,6 +45,12 @@ db = [
 where = [".."]
 include = ["investkit_utils*"]
 namespaces = false
+
+[tool.ruff]
+extend = "../pyproject.toml"
+
+[tool.ruff.lint.isort]
+known-first-party = ["investkit_utils"]
 
 [tool.mypy]
 python_version = "3.11"

@@ -11,6 +11,11 @@ from typing import Any
 
 from pydantic import BaseModel, Field, field_validator
 
+from investkit_utils.utils.data_utils import deep_merge
+
+DEFAULT_LOG_MAX_BYTES = 10 * 1024 * 1024
+DEFAULT_LOG_BACKUP_COUNT = 5
+
 
 class Environment(str, Enum):
     DEVELOPMENT = "development"
@@ -55,8 +60,8 @@ class LoggingOutputConfig(BaseModel):
 
 class LoggingRotationConfig(BaseModel):
     enabled: bool = True
-    max_bytes: int = 10485760
-    backup_count: int = 5
+    max_bytes: int = DEFAULT_LOG_MAX_BYTES
+    backup_count: int = DEFAULT_LOG_BACKUP_COUNT
 
 
 class LoggingFieldsConfig(BaseModel):
@@ -191,9 +196,7 @@ class DataSourceAlphaVantageConfig(BaseModel):
 
 class DataSourcesConfig(BaseModel):
     akshare: DataSourceAkshareConfig = Field(default_factory=DataSourceAkshareConfig)
-    alpha_vantage: DataSourceAlphaVantageConfig = Field(
-        default_factory=DataSourceAlphaVantageConfig
-    )
+    alpha_vantage: DataSourceAlphaVantageConfig = Field(default_factory=DataSourceAlphaVantageConfig)
 
 
 class MLFeaturesConfig(BaseModel):
@@ -282,11 +285,5 @@ class Config(BaseModel):
             other = other.model_dump()
 
         current = self.model_dump()
-        merged = self._deep_merge(current, other)
+        merged = deep_merge(current, other)
         return Config(**merged)
-
-    @staticmethod
-    def _deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
-        from investkit_utils.utils.data_utils import deep_merge
-
-        return deep_merge(base, override)

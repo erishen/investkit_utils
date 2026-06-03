@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+from dataclasses import fields, is_dataclass
 from datetime import date, datetime
 from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
+from enum import Enum
 from typing import Any, TypeVar
 
 T = TypeVar("T")
@@ -239,11 +242,38 @@ def to_decimal(value: Any, precision: int = 2) -> Decimal:
         return Decimal("0")
 
 
+def dataclass_to_dict(obj: Any) -> dict[str, Any]:
+    result = {}
+    for f in fields(obj):
+        value = getattr(obj, f.name)
+        result[f.name] = _serialize_value(value)
+    return result
+
+
+class ToDictMixin:
+    def to_dict(self) -> dict[str, Any]:
+        return dataclass_to_dict(self)
+
+
+def _serialize_value(value: Any) -> Any:
+    if value is None:
+        return None
+    if isinstance(value, Enum):
+        return value.value
+    if isinstance(value, (datetime, date)):
+        return value.isoformat()
+    if is_dataclass(value) and not isinstance(value, type):
+        return dataclass_to_dict(value)
+    if isinstance(value, list):
+        return [_serialize_value(item) for item in value]
+    return value
+
+
 def batch_process(
     items: list[T],
-    process_func: callable,
+    process_func: Callable[[T], Any],
     batch_size: int = 100,
-    on_batch_complete: callable | None = None,
+    on_batch_complete: Callable[[int, int, int], None] | None = None,
 ) -> list[Any]:
     """批量处理
 

@@ -21,10 +21,10 @@ def parse_date(value: str | date | datetime | None) -> date | None:
     """
     if value is None:
         return None
-    if isinstance(value, date):
-        return value
     if isinstance(value, datetime):
         return value.date()
+    if isinstance(value, date):
+        return value
 
     value = str(value).strip()
 

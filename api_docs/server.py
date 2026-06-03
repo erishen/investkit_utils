@@ -3,12 +3,16 @@
 提供聚合 API 文档的 Web 服务。
 """
 
+from typing import Any
+
+from investkit_utils.api_docs.discovery import ServiceRegistry
+
 
 def serve_aggregated_docs(
     services: list | None = None,
-    main_info: dict | None = None,
+    main_info: dict[str, Any] | None = None,
     port: int = 8080,
-    registry=None,
+    registry: ServiceRegistry | None = None,
 ):
     """启动聚合 API 文档服务
 

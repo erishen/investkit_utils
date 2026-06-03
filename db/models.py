@@ -7,6 +7,11 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 warnings.filterwarnings("ignore", category=DeprecationWarning, module="sqlalchemy")
 
+DEFAULT_POOL_SIZE = 5
+DEFAULT_MAX_OVERFLOW = 20
+DEFAULT_POOL_RECYCLE_SECONDS = 3600
+DEFAULT_POOL_TIMEOUT_SECONDS = 30
+
 Base = declarative_base()
 
 
@@ -52,7 +57,7 @@ class StockKline(Base):
         }
 
 
-class StockInfo(Base):
+class DBStockInfo(Base):
     __tablename__ = "stock_info"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -168,10 +173,10 @@ def init_database(db_url: str = "sqlite:///./data/asset_lens.db"):
         engine_kwargs["poolclass"] = StaticPool
     else:
         engine_kwargs["pool_pre_ping"] = True
-        engine_kwargs["pool_size"] = 10
-        engine_kwargs["max_overflow"] = 20
-        engine_kwargs["pool_recycle"] = 3600
-        engine_kwargs["pool_timeout"] = 30
+        engine_kwargs["pool_size"] = DEFAULT_POOL_SIZE
+        engine_kwargs["max_overflow"] = DEFAULT_MAX_OVERFLOW
+        engine_kwargs["pool_recycle"] = DEFAULT_POOL_RECYCLE_SECONDS
+        engine_kwargs["pool_timeout"] = DEFAULT_POOL_TIMEOUT_SECONDS
     engine = create_engine(db_url, **engine_kwargs)
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)

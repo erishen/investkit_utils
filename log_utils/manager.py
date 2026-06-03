@@ -4,7 +4,12 @@ import logging
 import sys
 from functools import lru_cache
 
-from investkit_utils.log_utils.config import LogFormat, LoggingConfig
+from investkit_utils.config.models import (
+    LoggingConfig,
+    LoggingFieldsConfig,
+    LoggingFormat,
+    LoggingOutputConfig,
+)
 from investkit_utils.log_utils.formatters import JsonFormatter, TextFormatter
 from investkit_utils.log_utils.logger import InvestKitLogger
 
@@ -29,53 +34,53 @@ class LoggerManager:
         for handler in root_logger.handlers[:]:
             root_logger.removeHandler(handler)
 
-        if config.console_output:
+        if config.output.console:
             console_handler = logging.StreamHandler(sys.stdout)
             console_handler.setLevel(getattr(logging, config.level.upper()))
 
-            if config.format == LogFormat.JSON:
+            if config.format == LoggingFormat.JSON:
                 console_handler.setFormatter(
                     JsonFormatter(
-                        include_module=config.include_module,
-                        include_correlation_id=config.include_correlation_id,
+                        include_module=config.fields.include_module,
+                        include_correlation_id=config.fields.include_correlation_id,
                     )
                 )
             else:
                 console_handler.setFormatter(
                     TextFormatter(
-                        include_module=config.include_module,
-                        include_correlation_id=config.include_correlation_id,
+                        include_module=config.fields.include_module,
+                        include_correlation_id=config.fields.include_correlation_id,
                     )
                 )
 
             root_logger.addHandler(console_handler)
 
-        if config.file_output:
+        if config.output.file:
             import os
             from logging.handlers import RotatingFileHandler
 
-            os.makedirs(os.path.dirname(config.file_path), exist_ok=True)
+            os.makedirs(os.path.dirname(config.output.path), exist_ok=True)
 
             file_handler = RotatingFileHandler(
-                config.file_path,
-                maxBytes=config.rotation_max_bytes,
-                backupCount=config.rotation_backup_count,
+                config.output.path,
+                maxBytes=config.rotation.max_bytes,
+                backupCount=config.rotation.backup_count,
                 encoding="utf-8",
             )
             file_handler.setLevel(getattr(logging, config.level.upper()))
 
-            if config.format == LogFormat.JSON:
+            if config.format == LoggingFormat.JSON:
                 file_handler.setFormatter(
                     JsonFormatter(
-                        include_module=config.include_module,
-                        include_correlation_id=config.include_correlation_id,
+                        include_module=config.fields.include_module,
+                        include_correlation_id=config.fields.include_correlation_id,
                     )
                 )
             else:
                 file_handler.setFormatter(
                     TextFormatter(
-                        include_module=config.include_module,
-                        include_correlation_id=config.include_correlation_id,
+                        include_module=config.fields.include_module,
+                        include_correlation_id=config.fields.include_correlation_id,
                     )
                 )
 
@@ -125,11 +130,15 @@ def setup_logging(
     """
     config = LoggingConfig(
         level=level,
-        format=LogFormat(log_format),
-        console_output=console,
-        file_output=file_path is not None,
-        file_path=file_path or "logs/app.log",
-        include_module=include_module,
-        include_correlation_id=include_correlation_id,
+        format=LoggingFormat(log_format),
+        output=LoggingOutputConfig(
+            console=console,
+            file=file_path is not None,
+            path=file_path or "logs/app.log",
+        ),
+        fields=LoggingFieldsConfig(
+            include_module=include_module,
+            include_correlation_id=include_correlation_id,
+        ),
     )
     LoggerManager.configure(config)

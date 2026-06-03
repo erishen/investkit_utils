@@ -122,21 +122,15 @@ class TestServiceRegistry:
         assert len(services) == 2
 
     def test_get_all_enabled_only(self):
-        self.registry.register(
-            ServiceInfo(name="enabled", url="http://localhost:8001", enabled=True)
-        )
-        self.registry.register(
-            ServiceInfo(name="disabled", url="http://localhost:8002", enabled=False)
-        )
+        self.registry.register(ServiceInfo(name="enabled", url="http://localhost:8001", enabled=True))
+        self.registry.register(ServiceInfo(name="disabled", url="http://localhost:8002", enabled=False))
         services = self.registry.get_all(enabled_only=True)
         assert len(services) == 1
         assert services[0].name == "enabled"
 
     def test_get_by_tag(self):
         self.registry.register(ServiceInfo(name="api1", url="http://localhost:8001", tags=["core"]))
-        self.registry.register(
-            ServiceInfo(name="api2", url="http://localhost:8002", tags=["extra"])
-        )
+        self.registry.register(ServiceInfo(name="api2", url="http://localhost:8002", tags=["extra"]))
         services = self.registry.get_by_tag("core")
         assert len(services) == 1
         assert services[0].name == "api1"

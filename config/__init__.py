@@ -14,82 +14,34 @@
     print(config.llm.default_provider)
 """
 
-from investkit_utils.config.loader import (
-    ConfigLoader,
-    clear_config_cache,
-    get_config,
-    reload_config,
-    set_config_path,
-)
-from investkit_utils.config.models import (
-    ApiConfig,
-    AppConfig,
-    CacheConfig,
-    CacheRedisConfig,
-    Config,
-    DatabaseConfig,
-    DatabasePoolConfig,
-    DatabasePostgreSQLConfig,
-    DatabaseSQLiteConfig,
-    DataSourceAkshareConfig,
-    DataSourceAlphaVantageConfig,
-    DataSourcesConfig,
-    LLMAnthropicConfig,
-    LLMConfig,
-    LLMOllamaConfig,
-    LLMOpenAIConfig,
-    LoggingConfig,
-    LoggingFieldsConfig,
-    LoggingOutputConfig,
-    LoggingRotationConfig,
-    MLConfig,
-    MLFeaturesConfig,
-    MLPredictionConfig,
-    MLTrainingConfig,
-    MonitoringConfig,
-    MonitoringHealthCheckConfig,
-    MonitoringMetricsConfig,
-    MonitoringTracingConfig,
-    SecurityAPIKeyConfig,
-    SecurityConfig,
-    SecurityJWTConfig,
-)
-
 __all__ = [
-    "ApiConfig",
-    "AppConfig",
-    "CacheConfig",
-    "CacheRedisConfig",
     "Config",
     "ConfigLoader",
-    "DataSourceAkshareConfig",
-    "DataSourceAlphaVantageConfig",
-    "DataSourcesConfig",
-    "DatabaseConfig",
-    "DatabasePoolConfig",
-    "DatabasePostgreSQLConfig",
-    "DatabaseSQLiteConfig",
-    "LLMAnthropicConfig",
-    "LLMConfig",
-    "LLMOllamaConfig",
-    "LLMOpenAIConfig",
-    "LoggingConfig",
-    "LoggingFieldsConfig",
-    "LoggingOutputConfig",
-    "LoggingRotationConfig",
-    "MLConfig",
-    "MLFeaturesConfig",
-    "MLPredictionConfig",
-    "MLTrainingConfig",
-    "MonitoringConfig",
-    "MonitoringHealthCheckConfig",
-    "MonitoringMetricsConfig",
-    "MonitoringTracingConfig",
-    "SecurityAPIKeyConfig",
-    "SecurityConfig",
-    "SecurityJWTConfig",
-    "clear_config_cache",
     "get_config",
-    "reload_config",
-    "set_config_path",
 ]
+
+_lazy_imports = {
+    "Config": "investkit_utils.config.models",
+    "get_config": "investkit_utils.config.loader",
+    "ConfigLoader": "investkit_utils.config.loader",
+    "reload_config": "investkit_utils.config.loader",
+    "set_config_path": "investkit_utils.config.loader",
+    "clear_config_cache": "investkit_utils.config.loader",
+    "AppConfig": "investkit_utils.config.models",
+    "LoggingConfig": "investkit_utils.config.models",
+    "DatabaseConfig": "investkit_utils.config.models",
+    "CacheConfig": "investkit_utils.config.models",
+    "ApiConfig": "investkit_utils.config.models",
+    "Environment": "investkit_utils.config.models",
+}
+
+
+def __getattr__(name):
+    if name in _lazy_imports:
+        import importlib
+
+        module = importlib.import_module(_lazy_imports[name])
+        value = getattr(module, name)
+        globals()[name] = value
+        return value
+    raise AttributeError(f"module 'investkit_utils.config' has no attribute {name!r}")

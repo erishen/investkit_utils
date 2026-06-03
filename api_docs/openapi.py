@@ -22,7 +22,8 @@ if TYPE_CHECKING:
     from investkit_utils.cache import CacheBackend
 
 _cache: CacheBackend | None = None
-_cache_ttl: int = 300  # 5 minutes
+_cache_ttl: int = 300
+_DEFAULT_HTTP_TIMEOUT = 10.0
 
 
 def set_cache(cache: CacheBackend | None, ttl: int = 300) -> None:
@@ -92,9 +93,7 @@ def merge_openapi_specs(
                     prefixed_name = f"{service_name}_{schema_name}" if service_name else schema_name
                     merged["components"]["schemas"][prefixed_name] = schema
             if "securitySchemes" in spec["components"]:
-                merged["components"]["securitySchemes"].update(
-                    spec["components"]["securitySchemes"]
-                )
+                merged["components"]["securitySchemes"].update(spec["components"]["securitySchemes"])
 
         if "tags" in spec:
             for tag in spec["tags"]:
@@ -103,9 +102,7 @@ def merge_openapi_specs(
                     existing_tags.add(tag_name)
                     merged["tags"].append(tag)
 
-    for service_name in set(
-        spec.get("_service") for spec in specs if spec and spec.get("_service")
-    ):
+    for service_name in set(spec.get("_service") for spec in specs if spec and spec.get("_service")):
         if service_name not in existing_tags:
             merged["tags"].append({"name": service_name, "description": f"{service_name} API"})
 
@@ -132,7 +129,7 @@ async def fetch_openapi_spec(service: APIService, use_cache: bool = True) -> dic
     try:
         import httpx
 
-        async with httpx.AsyncClient(timeout=10.0) as client:
+        async with httpx.AsyncClient(timeout=_DEFAULT_HTTP_TIMEOUT) as client:
             response = await client.get(f"{service.url}{service.openapi_url}")
             response.raise_for_status()
             spec = response.json()
@@ -143,7 +140,7 @@ async def fetch_openapi_spec(service: APIService, use_cache: bool = True) -> dic
                 _cache.set(cache_key, spec, ttl=_cache_ttl)
 
             return spec
-    except Exception as e:
+    except (httpx.HTTPError, httpx.InvalidURL) as e:
         logger.warning("Failed to fetch OpenAPI spec from %s: %s", service.name, e)
         return None
 
@@ -164,7 +161,7 @@ def load_openapi_spec_from_file(file_path: str) -> dict | None:
 
         with open(path, encoding="utf-8") as f:
             return json.load(f)
-    except Exception as e:
+    except (json.JSONDecodeError, OSError) as e:
         logger.warning("Failed to load OpenAPI spec from %s: %s", file_path, e)
         return None
 

@@ -1,7 +1,7 @@
 """数据验证器"""
 
 import re
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 
 def validate_stock_code(code: str) -> bool:
@@ -18,9 +18,9 @@ def validate_stock_code(code: str) -> bool:
         return False
 
     patterns = [
-        r"^\d{6}$",  # A股: 000001
-        r"^\d{6}\.[A-Z]{2}$",  # A股带后缀: 000001.SZ
-        r"^[A-Z]{1,5}(\.[A-Z])?$",  # 美股: AAPL, BRK.B
+        r"^\d{6}$",
+        r"^\d{6}\.[A-Z]{2}$",
+        r"^[A-Z]{1,5}(\.[A-Z])?$",
     ]
 
     return any(re.match(p, code) for p in patterns)
@@ -39,7 +39,7 @@ def validate_amount(value: str | int | float | Decimal) -> bool:
     try:
         amount = Decimal(str(value))
         return amount >= 0
-    except (ValueError, TypeError):
+    except (ValueError, TypeError, InvalidOperation):
         return False
 
 

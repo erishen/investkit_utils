@@ -26,17 +26,6 @@ def _make_cache_key(
     kwargs: dict,
     key_prefix: str | None = None,
 ) -> str:
-    """生成缓存键
-
-    Args:
-        func: 函数
-        args: 位置参数
-        kwargs: 关键字参数
-        key_prefix: 键前缀
-
-    Returns:
-        缓存键
-    """
     parts = [func.__module__, func.__qualname__]
 
     if args:
@@ -52,38 +41,23 @@ def _make_cache_key(
     return f"cached:{func.__name__}:{key_hash}"
 
 
+def _resolve_cache(cache: CacheBackend | str | None) -> CacheBackend:
+    if cache is None:
+        return get_cache()
+    if isinstance(cache, str):
+        return get_cache(cache)
+    return cache
+
+
 def cached(
     ttl: int | None = None,
     key_prefix: str | None = None,
     cache: CacheBackend | str | None = None,
 ) -> Callable[[F], F]:
-    """缓存装饰器 (同步函数)
-
-    Args:
-        ttl: 过期时间 (秒)
-        key_prefix: 键前缀
-        cache: 缓存实例或名称
-
-    Returns:
-        装饰器
-
-    示例:
-        @cached(ttl=300)
-        def expensive_function(arg):
-            return compute(arg)
-    """
-
     def decorator(func: F) -> F:
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
-            cache_instance: CacheBackend
-            if cache is None:
-                cache_instance = get_cache()
-            elif isinstance(cache, str):
-                cache_instance = get_cache(cache)
-            else:
-                cache_instance = cache
-
+            cache_instance = _resolve_cache(cache)
             key = _make_cache_key(func, args, kwargs, key_prefix)
 
             cached_value = cache_instance.get(key, default=_CACHE_MISS)
@@ -95,10 +69,7 @@ def cached(
 
             return result
 
-        wrapper._cache_info = {  # type: ignore
-            "ttl": ttl,
-            "key_prefix": key_prefix,
-        }
+        wrapper._cache_info = {"ttl": ttl, "key_prefix": key_prefix}  # type: ignore
 
         return wrapper  # type: ignore
 
@@ -110,33 +81,10 @@ def cached_async(
     key_prefix: str | None = None,
     cache: CacheBackend | str | None = None,
 ) -> Callable[[F], F]:
-    """缓存装饰器 (异步函数)
-
-    Args:
-        ttl: 过期时间 (秒)
-        key_prefix: 键前缀
-        cache: 缓存实例或名称
-
-    Returns:
-        装饰器
-
-    示例:
-        @cached_async(ttl=300)
-        async def async_function(arg):
-            return await compute(arg)
-    """
-
     def decorator(func: F) -> F:
         @functools.wraps(func)
         async def wrapper(*args: Any, **kwargs: Any) -> Any:
-            cache_instance: CacheBackend
-            if cache is None:
-                cache_instance = get_cache()
-            elif isinstance(cache, str):
-                cache_instance = get_cache(cache)
-            else:
-                cache_instance = cache
-
+            cache_instance = _resolve_cache(cache)
             key = _make_cache_key(func, args, kwargs, key_prefix)
 
             cached_value = cache_instance.get(key, default=_CACHE_MISS)
@@ -148,10 +96,7 @@ def cached_async(
 
             return result
 
-        wrapper._cache_info = {  # type: ignore
-            "ttl": ttl,
-            "key_prefix": key_prefix,
-        }
+        wrapper._cache_info = {"ttl": ttl, "key_prefix": key_prefix}  # type: ignore
 
         return wrapper  # type: ignore
 
@@ -203,25 +148,6 @@ def invalidate_cache(
     cache: CacheBackend | str | None = None,
     **kwargs: Any,
 ) -> bool:
-    """使缓存失效
-
-    Args:
-        func: 函数
-        *args: 位置参数
-        key_prefix: 键前缀
-        cache: 缓存实例或名称
-        **kwargs: 关键字参数
-
-    Returns:
-        是否删除成功
-    """
-    cache_instance: CacheBackend
-    if cache is None:
-        cache_instance = get_cache()
-    elif isinstance(cache, str):
-        cache_instance = get_cache(cache)
-    else:
-        cache_instance = cache
-
+    cache_instance = _resolve_cache(cache)
     key = _make_cache_key(func, args, kwargs, key_prefix)
     return cache_instance.delete(key)

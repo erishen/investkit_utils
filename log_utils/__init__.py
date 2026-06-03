@@ -12,9 +12,10 @@ InvestKit 统一日志模块
 
 from investkit_utils.log_utils.config import (
     LogFormat,
-    LoggingConfig,
+    LoggingFormat,
     LogLevel,
 )
+from investkit_utils.config.models import LoggingConfig
 from investkit_utils.log_utils.context import (
     get_correlation_id,
     set_correlation_id,
@@ -32,6 +33,7 @@ __all__ = [
     "LogLevel",
     "LoggerManager",
     "LoggingConfig",
+    "LoggingFormat",
     "get_correlation_id",
     "get_logger",
     "set_correlation_id",

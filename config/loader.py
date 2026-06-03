@@ -17,6 +17,7 @@ from typing import Any
 import yaml
 
 from investkit_utils.config.models import Config
+from investkit_utils.utils.data_utils import deep_merge
 
 _config_cache: dict[str, Config] = {}
 _config_paths: dict[str, Path] = {}
@@ -86,7 +87,7 @@ class ConfigLoader:
             with open(path, encoding="utf-8") as f:
                 data = yaml.safe_load(f) or {}
 
-            merged_data = cls._deep_merge(merged_data, data)
+            merged_data = deep_merge(merged_data, data)
 
         merged_data = cls._substitute_env_vars(merged_data)
         return Config(**merged_data)
@@ -150,13 +151,6 @@ class ConfigLoader:
             return os.environ.get(var_name, "")
 
         return cls.ENV_VAR_PATTERN.sub(replacer, value)
-
-    @staticmethod
-    def _deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
-        """深度合并两个字典"""
-        from investkit_utils.utils.data_utils import deep_merge
-
-        return deep_merge(base, override)
 
 
 def get_config(project_name: str | None = None) -> Config:

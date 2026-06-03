@@ -113,30 +113,42 @@ class TestConnection:
             os.unlink(db_file)
 
     def test_db_transaction_success(self):
-        from investkit_utils.db.connection import db_transaction
+        from investkit_utils.db.connection import db_connection
 
         with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
             db_file = f.name
         try:
-            with db_transaction(Path(db_file)) as conn:
+            with db_connection(Path(db_file)) as conn:
                 conn.execute("CREATE TABLE test (id INTEGER PRIMARY KEY)")
                 conn.execute("INSERT INTO test VALUES (1)")
-            with db_transaction(Path(db_file)) as conn:
+            with db_connection(Path(db_file)) as conn:
                 cursor = conn.execute("SELECT COUNT(*) FROM test")
                 assert cursor.fetchone()[0] == 1
         finally:
             os.unlink(db_file)
 
     def test_db_transaction_rollback(self):
-        from investkit_utils.db.connection import db_transaction
+        from investkit_utils.db.connection import db_connection
 
         with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
             db_file = f.name
         try:
             with pytest.raises(RuntimeError):
-                with db_transaction(Path(db_file)) as conn:
+                with db_connection(Path(db_file)) as conn:
                     conn.execute("CREATE TABLE test (id INTEGER PRIMARY KEY)")
                     raise RuntimeError("test error")
+        finally:
+            os.unlink(db_file)
+
+    def test_db_transaction_deprecated(self):
+        from investkit_utils.db.connection import db_transaction
+
+        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
+            db_file = f.name
+        try:
+            with pytest.warns(DeprecationWarning, match="db_transaction is deprecated"):
+                with db_transaction(Path(db_file)) as conn:
+                    conn.execute("CREATE TABLE test (id INTEGER PRIMARY KEY)")
         finally:
             os.unlink(db_file)
 
@@ -169,9 +181,9 @@ class TestModels:
         assert d["close"] == 1810.0
 
     def test_stockinfo_model(self):
-        from investkit_utils.db.models import StockInfo
+        from investkit_utils.db.models import DBStockInfo
 
-        info = StockInfo(code="sh600519", name="贵州茅台")
+        info = DBStockInfo(code="sh600519", name="贵州茅台")
         assert info.code == "sh600519"
         assert info.name == "贵州茅台"
 

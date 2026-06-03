@@ -14,8 +14,10 @@ try:
     import redis
 
     REDIS_AVAILABLE = True
+    _RedisConnectionError = redis.ConnectionError
 except ImportError:
     REDIS_AVAILABLE = False
+    _RedisConnectionError = ConnectionError
 
 
 class RedisCache(CacheBackend):
@@ -137,7 +139,7 @@ class RedisCache(CacheBackend):
         """检查 Redis 连接"""
         try:
             return self._client.ping()
-        except redis.ConnectionError:
+        except _RedisConnectionError:
             return False
 
     def close(self) -> None:
