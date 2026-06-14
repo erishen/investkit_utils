@@ -42,7 +42,7 @@ db = [
 ]
 
 [tool.setuptools.packages.find]
-where = [".."]
+where = ["."]
 include = ["investkit_utils*"]
 namespaces = false
 
