@@ -1,5 +1,14 @@
 from investkit_utils.types.enums import AssetType, Market, OrderStatus, OrderType, RiskLevel, SignalType
-from investkit_utils.types.models import MLPrediction, Order, Portfolio, Position, Price, RiskMetrics, StockInfo, TradeSignal
+from investkit_utils.types.models import (
+    MLPrediction,
+    Order,
+    Portfolio,
+    Position,
+    Price,
+    RiskMetrics,
+    StockInfo,
+    TradeSignal,
+)
 from datetime import datetime
 from decimal import Decimal
 
@@ -69,6 +78,7 @@ class TestStockInfoModel:
 
     def test_creation_full(self):
         from datetime import date
+
         info = StockInfo(
             code="00700",
             name="腾讯控股",
